@@ -2,22 +2,50 @@ from hypotenuse import CalculateHypotenuse
 
 
 def Sum(a, b):
+    """
+    Adds the two arguments.
+    :param a: a float or int
+    :param b: a float or int
+    :return: the result of adding
+    """
     return a + b
 
 
 def Multiply(a, b):
+    """
+    Multiplies the two arguments.
+    :param a: a float or int
+    :param b: a float or int
+    :return: the result of multiplying
+    """
     return a * b
 
 
 def Divide(a, b):
+    """
+    Divides the first argument by the second.
+    :param a: a float or int
+    :param b: a float or int
+    :return: the result of dividing
+    """
     return a / b
 
 
 def Subtract(a, b):
+    """
+    Subtracts the second argument from the first
+    :param a: a float or int
+    :param b: a float or int
+    :return: the result of subtracting
+    """
     return a - b
 
 
 def main():
+    """
+    Drives the program.
+    :return: none
+    """
     while True:
         print('1 to calculate hypotenuse')
         print('2 to add')
