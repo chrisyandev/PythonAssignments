@@ -43,7 +43,10 @@ class Asteroid:
         self._id = self.__generate_id()
 
     def move(self):
-        return self._position.add(self._velocity)
+        print('Asteroid {0} moved! Old Pos: {1} '
+              .format(self.get_id(), self.get_position()), end="")
+        self._position.add(self._velocity)
+        print('-> New Pos: {0}'.format(self.get_position()))
 
     def get_circumference(self):
         return self._circumference
@@ -63,16 +66,8 @@ class Asteroid:
         return cls.id_counter
 
     def __str__(self):
-        return 'ID: {0} | Circumference: {1} | Position: {2} | Velocity: {3}'\
-            .format(self.get_id(), self.get_circumference(), self.get_position(), self.get_velocity())
+        return 'Asteroid: {0} is currently at {2} and moving at {3} ' \
+               'meters per second. It has a circumference of {1}.'\
+            .format(self.get_id(), self.get_circumference(),
+                    self.get_position(), self.get_velocity())
 
-
-def main():
-    ast = Asteroid(10, Vector((1, 1, 1)), Vector((3, 2, 4)))
-    print(ast)
-    ast.move()
-    print(ast)
-
-
-if __name__ == '__main__':
-    main()

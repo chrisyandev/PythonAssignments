@@ -26,6 +26,7 @@ class Controller:
         for s in range(seconds):
             for a in cls.asteroids:
                 a.move()
+                print(a)
             while datetime.datetime.now().second < target_time:
                 pass
             target_time += 1
@@ -45,8 +46,7 @@ class Controller:
 
 def main():
     controller = Controller(100, 1, 4, 100, 5)
-
-    controller.simulate(20)
+    controller.simulate(5)
     print('finished simulation')
 
 
