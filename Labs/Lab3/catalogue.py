@@ -5,8 +5,8 @@ from library_item_generator import LibraryItemGenerator
 class Catalogue:
 
     def __init__(self, item_type):
-        self._type = item_type
-        self._items_list = []
+        self._type = item_type.lower()
+        self._item_list = []
 
     def _retrieve_item_by_call_number(self, call_number):
         """
@@ -16,7 +16,7 @@ class Catalogue:
         :return: Item object if found, None otherwise
         """
         found_item = None
-        for item in self._items_list:
+        for item in self._item_list:
             if item.call_number == call_number:
                 found_item = item
                 break
@@ -29,7 +29,7 @@ class Catalogue:
         :return: a list of titles.
         """
         title_list = []
-        for item in self._items_list:
+        for item in self._item_list:
             title_list.append(item.get_title())
         results = difflib.get_close_matches(title, title_list,
                                             cutoff=0.5)
@@ -39,7 +39,7 @@ class Catalogue:
         """
         Add an item to the library with a unique call number.
         """
-        new_item = LibraryItemGenerator.show_item_types()
+        new_item = LibraryItemGenerator.generate_item(self._type)
         found_item = self._retrieve_item_by_call_number(
             new_item.call_number)
         if found_item:
@@ -58,7 +58,7 @@ class Catalogue:
         """
         found_item = self._retrieve_item_by_call_number(call_number)
         if found_item:
-            self._items_list.remove(found_item)
+            self._item_list.remove(found_item)
             print(f"Successfully removed {found_item.get_title()} with "
                   f"call number: {call_number}")
         else:
@@ -71,7 +71,7 @@ class Catalogue:
         :precondition call_number: a unique identifier
         """
         target_item = self._retrieve_item_by_call_number(call_number)
-        if target_item.check_availability():
+        if target_item is not None and target_item.check_availability():
             status = self.reduce_item_count(call_number)
             if status:
                 print("Checkout complete!")
@@ -129,8 +129,8 @@ class Catalogue:
 
     @property
     def items(self):
-        return self._items_list
+        return self._item_list
 
     @property
-    def type(self):
+    def item_type(self):
         return self._type

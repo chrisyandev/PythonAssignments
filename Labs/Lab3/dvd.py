@@ -17,8 +17,8 @@ class DVD(Item):
         return self._region_code
 
     def __str__(self):
-        return f"---- Journal: {self.get_title()} ----\n" \
+        return f"---- DVD: {self.title} ----\n" \
                f"Call Number: {self.call_number}\n" \
-               f"Number of Copies: {self._num_copies}\n" \
-               f"Release Date: {self._release_date}\n" \
-               f"Region Code: {self._region_code}"
+               f"Number of Copies: {self.num_copies}\n" \
+               f"Release Date: {self.release_date}\n" \
+               f"Region Code: {self.region_code}"

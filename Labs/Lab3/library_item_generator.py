@@ -6,33 +6,13 @@ from dvd import DVD
 class LibraryItemGenerator:
 
     @classmethod
-    def show_item_types(cls):
-        user_input = None
-        while user_input != 4:
-            print("\nWhich item do you want to create?")
-            print("-----------------------")
-            print("1. Book")
-            print("2. Journal")
-            print("3. DVD")
-            print("4. Quit")
-            string_input = input("Please enter your choice (1-4)")
-
-            if string_input == '':
-                continue
-
-            user_input = int(string_input)
-
-            if user_input == 1:
-                return cls.create_book()
-            elif user_input == 2:
-                return cls.create_journal()
-            elif user_input == 3:
-                return cls.create_dvd()
-            elif user_input == 4:
-                pass
-            else:
-                print("Could not process the input. Please enter a"
-                      " number from 1 - 4.")
+    def generate_item(cls, item_type):
+        if item_type.lower() == "books":
+            return cls.create_book()
+        if item_type.lower() == "journals":
+            return cls.create_journal()
+        if item_type.lower() == "dvds":
+            return cls.create_dvd()
 
     @staticmethod
     def create_book():
