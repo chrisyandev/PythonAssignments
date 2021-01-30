@@ -3,8 +3,14 @@ from library_item_generator import LibraryItemGenerator
 
 
 class Catalogue:
-
+    """
+    Represents a list of items belonging to a specific catalogue.
+    """
     def __init__(self, item_type):
+        """
+        Initializes a list to store Item objects.
+        :param item_type: a string
+        """
         self._type = item_type.lower()
         self._item_list = []
 
@@ -30,7 +36,7 @@ class Catalogue:
         """
         title_list = []
         for item in self._item_list:
-            title_list.append(item.get_title())
+            title_list.append(item.title)
         results = difflib.get_close_matches(title, title_list,
                                             cutoff=0.5)
         return results
@@ -59,7 +65,7 @@ class Catalogue:
         found_item = self._retrieve_item_by_call_number(call_number)
         if found_item:
             self._item_list.remove(found_item)
-            print(f"Successfully removed {found_item.get_title()} with "
+            print(f"Successfully removed {found_item.title} with "
                   f"call number: {call_number}")
         else:
             print(f"item with call number: {call_number} not found.")
@@ -129,8 +135,16 @@ class Catalogue:
 
     @property
     def items(self):
+        """
+        Gets the list of items in this catalogue.
+        :return: a List
+        """
         return self._item_list
 
     @property
     def item_type(self):
+        """
+        Gets the type of items in this catalogue.
+        :return: a string
+        """
         return self._type

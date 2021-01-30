@@ -21,9 +21,17 @@ class Book(Item):
 
     @property
     def author(self):
+        """
+        Gets the book's author.
+        :return: a string
+        """
         return self._author
 
     def __str__(self):
+        """
+        Formats the attributes of this book.
+        :return: a string
+        """
         return f"---- Book: {self.title} ----\n" \
                f"Call Number: {self.call_number}\n" \
                f"Number of Copies: {self.num_copies}\n" \

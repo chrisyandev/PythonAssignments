@@ -2,9 +2,17 @@ from abc import *
 
 
 class Item(ABC):
-
+    """
+    An abstract class used as the base for all types of items
+    that can be added to a library. Not meant to be instantiated.
+    """
     @abstractmethod
     def __init__(self, call_num, title, num_copies):
+        """
+        :param call_num: a string
+        :param title: a string
+        :param num_copies: an integer
+        """
         self._call_num = call_num
         self._title = title
         self._num_copies = num_copies
@@ -58,4 +66,8 @@ class Item(ABC):
 
     @abstractmethod
     def __str__(self):
+        """
+        This abstract method should return a formatted string.
+        :return: a string
+        """
         pass

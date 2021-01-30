@@ -4,9 +4,14 @@ from dvd import DVD
 
 
 class LibraryItemGenerator:
-
+    """A factory class used to create different types of Items."""
     @classmethod
     def generate_item(cls, item_type):
+        """
+        Determines which type of object to generate.
+        :param item_type: a string
+        :return: an object
+        """
         if item_type.lower() == "books":
             return cls.create_book()
         if item_type.lower() == "journals":
@@ -16,6 +21,10 @@ class LibraryItemGenerator:
 
     @staticmethod
     def create_book():
+        """
+        Creates a Book object.
+        :return: a Book object
+        """
         call_number = input("Enter Call Number: ")
         title = input("Enter title: ")
         num_copies = int(input("Enter number of copies "
@@ -25,6 +34,10 @@ class LibraryItemGenerator:
 
     @staticmethod
     def create_journal():
+        """
+        Creates a Journal object.
+        :return: a Journal object
+        """
         call_number = input("Enter Call Number: ")
         title = input("Enter title: ")
         num_copies = int(input("Enter number of copies "
@@ -35,6 +48,10 @@ class LibraryItemGenerator:
 
     @staticmethod
     def create_dvd():
+        """
+        Creates a DVD object.
+        :return: a DVD object
+        """
         call_number = input("Enter Call Number: ")
         title = input("Enter title: ")
         num_copies = int(input("Enter number of copies "
