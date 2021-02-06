@@ -23,3 +23,7 @@ class BankAccount:
     def execute_transaction(self, transaction):
         self._balance -= transaction.amount
         self._transaction_list.append(transaction)
+
+    def print_transactions(self):
+        for t in self._transaction_list:
+            print(t)

@@ -32,8 +32,10 @@ class User(ABC):
             print(f"2. {BudgetCategory.CLOTHING.value.title()}")
             print(f"3. {BudgetCategory.EATING_OUT.value.title()}")
             print(f"4. {BudgetCategory.MISC.value.title()}")
+            print("-----------------------")
             print("5. Quit")
-            string_input = input("Please enter your choice (1-5): ")
+            print("6. Print All Transactions")
+            string_input = input("Please enter your choice (1-6): ")
 
             if string_input == '':
                 continue
@@ -58,9 +60,14 @@ class User(ABC):
                     TransactionPerformer.perform_transaction(budget, self._bank_account)
             elif user_input == 5:
                 pass
+            elif user_input == 6:
+                print("\nALL TRANSACTIONS")
+                print("----------------")
+                self._bank_account.print_transactions()
+                input("Press ENTER to continue")
             else:
                 print("Could not process the input. Please enter a"
-                      " number from 1 - 5: ")
+                      " number from 1 - 6: ")
 
     def get_budget(self, category):
         for b in self._budget_list:

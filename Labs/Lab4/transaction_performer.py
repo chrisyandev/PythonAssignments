@@ -19,4 +19,5 @@ class TransactionPerformer:
             budget.execute_transaction(transaction)
             bank_account.execute_transaction(transaction)
             print("Transaction successful")
+            print(transaction)
             return True
