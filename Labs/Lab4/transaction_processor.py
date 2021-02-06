@@ -1,11 +1,15 @@
-from my_enums import *
 from transaction import Transaction
 
 
-class TransactionPerformer:
+class TransactionProcessor:
+    """ Processes a transaction. """
 
     @staticmethod
-    def perform_transaction(budget, bank_account):
+    def process_transaction(budget, bank_account):
+        """
+        Makes sure both the Budget and BankAccount allows for the Transaction
+        to execute before actually executing it.
+        """
         amount = float(input("Enter amount: "))
         shop = input("Enter shop/website name: ")
 

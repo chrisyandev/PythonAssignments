@@ -7,11 +7,19 @@ from budget import Budget
 
 
 def main():
+    """
+    Drives the program.
+    :return: none
+    """
     user_bob = load_test_user()
     user_bob.initiate_transaction()
 
 
 def load_test_user():
+    """
+    Creates dummy objects to be tested.
+    :return: a User object
+    """
     test_bank_account = BankAccount("RBC", 500.0)
     test_user = Troublemaker("Bob", 12, "troublemaker", test_bank_account)
 
