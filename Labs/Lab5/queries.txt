@@ -1,0 +1,2 @@
+Africa: The second largest of the continents, on the Mediterranean in the north, the Atlantic in the west, and the Red Sea, Gulf of Aden, and Indian Ocean in the east.
+graph: In mathematics and computer science, an abstract representation of a set of items connected by edges. Each item is called a vertex or node. Formally, a graph is a set of vertices and a binary relation between vertices, adjacency.\n(source: NIST)
