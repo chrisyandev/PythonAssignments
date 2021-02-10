@@ -22,6 +22,8 @@ class FileHandler:
                 with open(path, mode="r", encoding="utf-8") as data_file:
                     data = json.load(data_file)
                     return data
+            else:
+                raise InvalidFileTypeError()
 
     @staticmethod
     def write_lines(path, lines):
@@ -30,3 +32,6 @@ class FileHandler:
                 my_text_file.write(line)
 
 
+class InvalidFileTypeError(Exception):
+    def __init__(self):
+        super().__init__("Error! File is not .txt or .json!")
