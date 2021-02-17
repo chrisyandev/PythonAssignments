@@ -26,15 +26,43 @@ class User(ABC):
         self._id = self.__next_id
         self.__next_id += 1
 
-    # def view_budgets(self):
-    #     pass
-    #
-    # def view_transactions_by_budget(self):
-    #     for budget in self._budgetList:
-    #         print(budget)
-    #
-    # def view_bank_account_details(self):
-    #     print(self._bankAccount)
+    def show_user_menu(self):
+        user_input = None
+
+        while user_input != 5:
+            print("What do you want to do?")
+            print("-----------------------")
+            print("1. View budgets")
+            print("2. Record a transaction")
+            print("3. View transactions by budget")
+            print("4. View bank account details")
+            print("-----------------------")
+            print("5. Log out")
+
+            try:
+                user_input = int(input("Please enter your choice (1-5): "))
+            except ValueError:
+                print("Must be an integer")
+                continue
+
+            if user_input == 1:
+                print("--- All Budgets ---")
+                self.print_all_budgets()
+                input("Press ENTER to continue")
+            elif user_input == 2:
+                self.initiate_transaction()
+            elif user_input == 3:
+                self.view_transactions_by_budget()
+            elif user_input == 4:
+                print("--- Bank Account Details ---")
+                print(self._bank_account)
+                print("--- All Transactions ---")
+                self._bank_account.print_transactions()
+                input("Press ENTER to continue")
+            elif user_input == 5:
+                pass
+            else:
+                print("Please enter a number from 1-5")
 
     def initiate_transaction(self):
         """
@@ -52,40 +80,69 @@ class User(ABC):
             print("4. Misc")
             print("-----------------------")
             print("5. Quit")
-            print("6. Print All Transactions")
-            string_input = input("Please enter your choice (1-6): ")
 
-            if string_input == '':
+            try:
+                user_input = int(input("Please enter your choice (1-5): "))
+            except ValueError:
+                print("Must be an integer")
                 continue
 
-            user_input = int(string_input)
-
             if user_input == 1:
-                budget = self.get_budget(BudgetCategory.ENTERTAINMENT.value)
-                if budget is not None:
-                    TransactionProcessor.process_transaction(budget, self._bank_account)
+                budget = self.get_budget(BudgetCategory.ENTERTAINMENT)
+                TransactionProcessor.process_transaction(budget, self._bank_account)
             elif user_input == 2:
-                budget = self.get_budget(BudgetCategory.CLOTHING.value)
-                if budget is not None:
-                    TransactionProcessor.process_transaction(budget, self._bank_account)
+                budget = self.get_budget(BudgetCategory.CLOTHING)
+                TransactionProcessor.process_transaction(budget, self._bank_account)
             elif user_input == 3:
-                budget = self.get_budget(BudgetCategory.EATING_OUT.value)
-                if budget is not None:
-                    TransactionProcessor.process_transaction(budget, self._bank_account)
+                budget = self.get_budget(BudgetCategory.EATING_OUT)
+                TransactionProcessor.process_transaction(budget, self._bank_account)
             elif user_input == 4:
-                budget = self.get_budget(BudgetCategory.MISC.value)
-                if budget is not None:
-                    TransactionProcessor.process_transaction(budget, self._bank_account)
+                budget = self.get_budget(BudgetCategory.MISC)
+                TransactionProcessor.process_transaction(budget, self._bank_account)
             elif user_input == 5:
                 pass
-            elif user_input == 6:
-                print("\nALL TRANSACTIONS")
-                print("----------------")
-                self._bank_account.print_transactions()
-                input("Press ENTER to continue")
             else:
-                print("Could not process the input. Please enter a"
-                      " number from 1 - 6: ")
+                print("Please enter a number from 1-5")
+
+    def view_transactions_by_budget(self):
+        user_input = None
+        while user_input != 5:
+            print("View transactions for which category?")
+            print("----------------")
+            print("1. Entertainment")
+            print("2. Clothing")
+            print("3. Eating out")
+            print("4. Misc")
+            print("----------------")
+            print("5. Back")
+
+            try:
+                user_input = int(input("Please enter your choice (1-5): "))
+            except ValueError:
+                print("Must be an integer")
+                continue
+
+            if user_input == 1:
+                self.get_budget(BudgetCategory.ENTERTAINMENT)\
+                    .print_all_transactions()
+                input("Press ENTER to continue")
+            elif user_input == 2:
+                self.get_budget(BudgetCategory.CLOTHING)\
+                    .print_all_transactions()
+                input("Press ENTER to continue")
+            elif user_input == 3:
+                self.get_budget(BudgetCategory.EATING_OUT)\
+                    .print_all_transactions()
+                input("Press ENTER to continue")
+            elif user_input == 4:
+                self.get_budget(BudgetCategory.MISC)\
+                    .print_all_transactions()
+                input("Press ENTER to continue")
+            elif user_input == 5:
+                pass
+            else:
+                print("Please enter a number from 1-5")
+
 
     def get_budget(self, category):
         """
@@ -98,16 +155,16 @@ class User(ABC):
                 return b
         return None
 
-    def add_budget(self, total_amount, category):
-        self._budget_list.append(Budget(total_amount, category))
+    def add_budget(self, budget):
+        self._budget_list.append(budget)
 
-    @property
-    def budget_list(self):
+    def print_all_budgets(self):
         """
-        Gets the whole list of Budgets.
-        :return: a list
+        Prints the whole list of Budgets.
+        :return: none
         """
-        return self._budget_list
+        for budget in self._budget_list:
+            print(budget)
 
     @property
     def id(self):

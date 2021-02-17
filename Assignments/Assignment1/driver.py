@@ -22,19 +22,19 @@ def main():
 def show_main_menu(user_list):
     user_input = None
 
-    while user_input != 5:
+    while user_input != 3:
         print("Main Menu")
         print("-----------------------")
         print("1. Register new user")
         print("2. Login")
         print("3. Exit")
         print("-----------------------")
-        string_input = input("Please enter your choice (1-3): ")
 
-        if string_input == '':
+        try:
+            user_input = int(input("Please enter your choice (1-3): "))
+        except ValueError:
+            print("Must be an integer")
             continue
-
-        user_input = int(string_input)
 
         if user_input == 1:
             user_list.register_user()
@@ -43,8 +43,7 @@ def show_main_menu(user_list):
         elif user_input == 3:
             pass
         else:
-            print("Could not process the input. Please enter a"
-                  " number from 1 - 3: ")
+            print("Please enter a number from 1-3")
 
 def load_test_user():
     """
@@ -59,10 +58,10 @@ def load_test_user():
     budget_eating_out = Budget(100.0, BudgetCategory.EATING_OUT.value)
     budget_misc = Budget(100.0, BudgetCategory.MISC.value)
 
-    test_user.budget_list.append(budget_entertainment)
-    test_user.budget_list.append(budget_clothing)
-    test_user.budget_list.append(budget_eating_out)
-    test_user.budget_list.append(budget_misc)
+    test_user.add_budget(budget_entertainment)
+    test_user.add_budget(budget_clothing)
+    test_user.add_budget(budget_eating_out)
+    test_user.add_budget(budget_misc)
 
     return test_user
 

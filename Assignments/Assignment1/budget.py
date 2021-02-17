@@ -44,6 +44,11 @@ class Budget:
         self._amount_spent += transaction.amount
         self._transaction_list.append(transaction)
 
+    def print_all_transactions(self):
+        print(f"--- All transactions for {self._category.name} ---")
+        for t in self._transaction_list:
+            print(t)
+
     @property
     def category(self):
         """
@@ -51,3 +56,15 @@ class Budget:
         :return: a string
         """
         return self._category
+
+    def __str__(self):
+        """
+        Formats the Budget's attributes.
+        :return: a string
+        """
+        return f"Budget for {self._category.name}\n" \
+               f"Amount spent: ${self._amount_spent : .2f}\n" \
+               f"Amount left: " \
+               f"${(self._total_amount - self._amount_spent) : .2f}\n" \
+               f"Total amount: ${self._total_amount : .2f}\n" \
+               f"Locked: {self._locked}\n"

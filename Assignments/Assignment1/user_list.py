@@ -1,4 +1,5 @@
 from user import User
+from budget import Budget
 from my_enums import *
 from bank_account import BankAccount
 from user_factory import UserFactory
@@ -37,7 +38,7 @@ class UserList:
                 if 1 <= user_input <= 3:
                     user_type = UserType(user_input)
                 else:
-                    print("Choice not available")
+                    print("Please enter a number from 1-3")
                     user_input = None
 
         bank_account_number = input("Bank account number: ")
@@ -56,6 +57,8 @@ class UserList:
         self.__set_up_budgets(new_user)
         self._user_list.append(new_user)
 
+        new_user.show_user_menu()
+
     @staticmethod
     def __set_up_budgets(user):
         for category in BudgetCategory:
@@ -66,7 +69,7 @@ class UserList:
                 except ValueError:
                     print("Must be a number")
                     continue
-            user.add_budget(budget_amount, category)
+            user.add_budget(Budget(budget_amount, category))
 
     def delete_user(self, user_id):
         for user in self._user_list:

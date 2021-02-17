@@ -45,3 +45,12 @@ class BankAccount:
         """
         for t in self._transaction_list:
             print(t)
+
+    def __str__(self):
+        """
+        Formats the BankAccount's attributes.
+        :return: a string
+        """
+        return f"Account number: {self._account_number}\n" \
+               f"Bank name: {self._bank_name}\n" \
+               f"Balance: ${self._balance : .2f}\n"
