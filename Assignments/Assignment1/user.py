@@ -174,6 +174,14 @@ class User(ABC):
         """
         return self._id
 
+    @property
+    def name(self):
+        """
+        Gets the user's name.
+        :return: a string
+        """
+        return self._name
+
     def __str__(self):
         return f"Name: {self._name}\n" \
                f"Age: {self._age}\n" \

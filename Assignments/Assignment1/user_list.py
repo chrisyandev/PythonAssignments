@@ -78,6 +78,8 @@ class UserList:
                 return True
         return False
 
-    @property
-    def user_list(self):
-        return self._user_list
+    def get_user_at_index(self, index):
+        return self._user_list[index]
+
+    def __len__(self):
+        return len(self._user_list)

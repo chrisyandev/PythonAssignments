@@ -39,11 +39,44 @@ def show_main_menu(user_list):
         if user_input == 1:
             user_list.register_user()
         elif user_input == 2:
-            pass
+            show_all_users(user_list)
         elif user_input == 3:
             pass
         else:
             print("Please enter a number from 1-3")
+
+def show_all_users(user_list):
+    if len(user_list) == 0:
+        print("No users")
+        input("Press ENTER to go back")
+        return
+
+    last_menu_num = len(user_list) + 1
+    user_input = None
+
+    while user_input != last_menu_num:
+        print("Users")
+        print("-----------------------")
+        for x in range(len(user_list)):
+            print(f"{x + 1}. {user_list.get_user_at_index(x).name}")
+        print("-----------------------")
+        print(f"{last_menu_num}. Main Menu")
+
+        try:
+            user_input = int(
+                input(f"Please enter your choice (1-{last_menu_num}): "))
+        except ValueError:
+            print("Must be an integer")
+            continue
+
+        if user_input == last_menu_num:
+            pass
+        elif 1 <= user_input < last_menu_num:
+            user = user_list.get_user_at_index(user_input-1)
+            user.show_user_menu()
+        else:
+            print(f"Please enter a number from 1-{last_menu_num}")
+
 
 def load_test_user():
     """
