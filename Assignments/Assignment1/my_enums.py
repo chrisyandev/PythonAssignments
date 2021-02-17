@@ -10,7 +10,7 @@ class UserType(Enum):
 
 class BudgetCategory(Enum):
     """ Possible Budget categories. """
-    ENTERTAINMENT = "entertainment"
-    CLOTHING = "clothing"
-    EATING_OUT = "eating out"
-    MISC = "misc"
+    ENTERTAINMENT = 1
+    CLOTHING = 2
+    EATING_OUT = 3
+    MISC = 4

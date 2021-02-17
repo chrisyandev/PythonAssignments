@@ -7,12 +7,12 @@ class Transaction:
     def __init__(self, amount, budget_category, shop):
         """
         :param amount: a float
-        :param budget_category: a string
+        :param budget_category: a BudgetCategory
         :param shop: a string
         """
         self._timestamp = datetime.datetime.now().strftime("%d/%m/%Y %H:%M")
         self._amount = amount
-        self._budget_category = budget_category.title()
+        self._budget_category = budget_category
         self._shop = shop
 
     @property
@@ -30,5 +30,5 @@ class Transaction:
         """
         return f"You made a transaction at {self._timestamp}\n" \
                f"Amount: ${self._amount : .2f}\n" \
-               f"Category: {self._budget_category}\n" \
+               f"Category: {self._budget_category.name}\n" \
                f"Shop/Website: {self._shop}\n"

@@ -3,7 +3,10 @@ from my_enums import *
 from bank_account import BankAccount
 from user_factory import UserFactory
 
+
 class UserList:
+    """ Holds the Users registered and controlled by a parent. """
+
     def __init__(self):
         self._user_list = []
 
@@ -50,9 +53,20 @@ class UserList:
         bank_account = BankAccount(bank_account_number, bank_name, bank_balance)
 
         new_user = UserFactory.create_user(name=name, age=age, user_type=user_type, bank_account=bank_account)
+        self.__set_up_budgets(new_user)
         self._user_list.append(new_user)
-        print(new_user)
-        print(type(new_user))
+
+    @staticmethod
+    def __set_up_budgets(user):
+        for category in BudgetCategory:
+            budget_amount = None
+            while budget_amount is None:
+                try:
+                    budget_amount = float(input(f"Budget for {category.name}: "))
+                except ValueError:
+                    print("Must be a number")
+                    continue
+            user.add_budget(budget_amount, category)
 
     def delete_user(self, user_id):
         for user in self._user_list:
@@ -60,7 +74,6 @@ class UserList:
                 self._user_list.remove(user)
                 return True
         return False
-
 
     @property
     def user_list(self):

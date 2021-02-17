@@ -1,6 +1,7 @@
 from abc import *
 from my_enums import *
 from transaction_processor import *
+from budget import Budget
 
 
 class User(ABC):
@@ -45,10 +46,10 @@ class User(ABC):
         while user_input != 5:
             print("In which category do you want to perform a transaction?")
             print("-----------------------")
-            print(f"1. {BudgetCategory.ENTERTAINMENT.value.title()}")
-            print(f"2. {BudgetCategory.CLOTHING.value.title()}")
-            print(f"3. {BudgetCategory.EATING_OUT.value.title()}")
-            print(f"4. {BudgetCategory.MISC.value.title()}")
+            print("1. Entertainment")
+            print("2. Clothing")
+            print("3. Eating out")
+            print("4. Misc")
             print("-----------------------")
             print("5. Quit")
             print("6. Print All Transactions")
@@ -89,13 +90,16 @@ class User(ABC):
     def get_budget(self, category):
         """
         Retrieves a Budget of a certain category.
-        :param category: a string
+        :param category: a BudgetCategory
         :return: a Budget object
         """
         for b in self._budget_list:
             if b.category == category:
                 return b
         return None
+
+    def add_budget(self, total_amount, category):
+        self._budget_list.append(Budget(total_amount, category))
 
     @property
     def budget_list(self):
