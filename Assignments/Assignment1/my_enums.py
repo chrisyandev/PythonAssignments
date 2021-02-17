@@ -3,9 +3,9 @@ from enum import *
 
 class UserType(Enum):
     """ Possible types of Users. """
-    ANGEL = "angel"
-    TROUBLEMAKER = "troublemaker"
-    REBEL = "rebel"
+    ANGEL = 1
+    TROUBLEMAKER = 2
+    REBEL = 3
 
 
 class BudgetCategory(Enum):

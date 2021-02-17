@@ -1,19 +1,16 @@
 class BankAccount:
     """ Represents a bank account that holds available funds of the User. """
 
-    # For making each account number unique
-    __next_account_number = 100000
-
-    def __init__(self, bank_name, balance):
+    def __init__(self, account_number, bank_name, balance):
         """
+        :param account_number: a string
         :param bank_name: a string
         :param balance: a float
         """
+        self._account_number = account_number
         self._bank_name = bank_name
         self._balance = balance
         self._transaction_list = []
-        self._bank_account_number = self.__next_account_number
-        self.__next_account_number += 1
 
     # Checks if there is enough in the bank to fulfill request
     def __not_enough_balance(self, spending):

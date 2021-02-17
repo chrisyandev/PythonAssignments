@@ -6,19 +6,24 @@ from transaction_processor import *
 class User(ABC):
     """ Represents an abstract base class of users. """
 
+    # For making each user id unique
+    __next_id = 100
+
     @abstractmethod
     def __init__(self, name, age, user_type, bank_account):
         """
         :param name: a string
         :param age: an int
-        :param user_type: a string
+        :param user_type: a UserType
         :param bank_account: a BankAccount object
         """
         self._name = name
         self._age = age
-        self._user_type = user_type.lower()
+        self._user_type = user_type
         self._bank_account = bank_account
         self._budget_list = []
+        self._id = self.__next_id
+        self.__next_id += 1
 
     # def view_budgets(self):
     #     pass
@@ -99,3 +104,18 @@ class User(ABC):
         :return: a list
         """
         return self._budget_list
+
+    @property
+    def id(self):
+        """
+        Gets the user id.
+        :return: an int
+        """
+        return self._id
+
+    def __str__(self):
+        return f"Name: {self._name}\n" \
+               f"Age: {self._age}\n" \
+               f"User type: {self._user_type.name}\n"
+
+
