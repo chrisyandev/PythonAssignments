@@ -5,6 +5,7 @@ class BudgetManager:
         self._user = user
         self._do_notify = True
         self._do_warn = True
+        self._show_transactions = False
         self._budget_locked_count = 0
 
     def trigger(self):
@@ -14,6 +15,10 @@ class BudgetManager:
             self.notify()
         self.lock_budget_if_exceed()
         input("Press ENTER to continue")
+        if self._show_transactions:
+            self._budget.print_all_transactions()
+            input("Press ENTER to continue")
+            self._show_transactions = False
 
     def notify(self):
         amount_spent = self._budget.amount_spent
@@ -24,6 +29,7 @@ class BudgetManager:
             print(f"Note: You've exceeded your entire budget "
                   f"for {category_name}")
             print("--------------------------------------------------")
+            self._show_transactions = True
             if self._user.__class__.notify_once:
                 self._do_notify = False
 
@@ -37,6 +43,7 @@ class BudgetManager:
             print(f"Warning: You've exceeded {warning_threshold * 100}"
                   f"% of your budget for {category_name}")
             print("--------------------------------------------------")
+            self._show_transactions = True
             if self._user.__class__.warn_once:
                 self._do_warn = False
 
