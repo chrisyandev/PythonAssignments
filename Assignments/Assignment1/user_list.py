@@ -6,12 +6,14 @@ from user_factory import UserFactory
 
 
 class UserList:
-    """ Holds the Users registered and controlled by a parent. """
+    """ Holds the Users (children) registered and controlled by a parent. """
 
     def __init__(self):
+        """ Initializes an empty list. """
         self._user_list = []
 
     def register_user(self):
+        """ Prompts for User details and creates an instance of it. """
         name = input("Name: ")
 
         age = None
@@ -61,6 +63,7 @@ class UserList:
 
     @staticmethod
     def __set_up_budgets(user):
+        # Gets budget limit input and creates Budget objects
         for category in BudgetCategory:
             budget_amount = None
             while budget_amount is None:
@@ -72,9 +75,11 @@ class UserList:
             user.add_budget(budget_amount, category)
 
     def add_user(self, user):
+        """ Adds a user to the list. """
         self._user_list.append(user)
 
     def delete_user(self, user_id):
+        """ Deletes a user from the list. """
         for user in self._user_list:
             if user.id == user_id:
                 self._user_list.remove(user)
@@ -82,7 +87,9 @@ class UserList:
         return False
 
     def get_user_at_index(self, index):
+        """ Gets a user at an index. """
         return self._user_list[index]
 
     def __len__(self):
+        """ Returns the length of the user list. """
         return len(self._user_list)

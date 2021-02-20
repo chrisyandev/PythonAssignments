@@ -12,8 +12,8 @@ class BankAccount:
         self._balance = balance
         self._transaction_list = []
 
-    # Checks if there is enough in the bank to fulfill request
     def __not_enough_balance(self, spending):
+        # Checks if there is enough in the bank to fulfill request
         if (self._balance - spending) < 0:
             return True
         return False

@@ -19,12 +19,12 @@ class Budget:
         self._budget_manager = BudgetManager(self, user)
 
     def set_lock(self, do_lock):
+        """ Sets the locked state. """
         self._locked = do_lock
 
-    def check_transaction(self, transaction):
+    def check_transaction(self):
         """
         Checks if transaction is allowed to execute.
-        :param transaction: a Transaction
         :return: a boolean
         """
         if self._locked:
@@ -45,6 +45,7 @@ class Budget:
         self._budget_manager.trigger()
 
     def print_all_transactions(self):
+        """ Prints all transactions of this category. """
         print(f"--- All transactions for {self._category.name} ---")
         for t in self._transaction_list:
             print(t)
@@ -59,10 +60,12 @@ class Budget:
 
     @property
     def amount_spent(self):
+        """ Gets the amount spent. """
         return self._amount_spent
 
     @property
     def total_amount(self):
+        """ Gets the budget limit. """
         return self._total_amount
 
     def __str__(self):

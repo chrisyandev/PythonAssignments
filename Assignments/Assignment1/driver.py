@@ -3,7 +3,6 @@ from angel import Angel
 from troublemaker import Troublemaker
 from rebel import Rebel
 from bank_account import BankAccount
-from budget import Budget
 from user_list import UserList
 
 
@@ -19,6 +18,7 @@ def main():
 
 
 def show_main_menu(user_list):
+    """ Displayed on program start. """
     user_input = None
 
     while user_input != 3:
@@ -44,7 +44,9 @@ def show_main_menu(user_list):
         else:
             print("Please enter a number from 1-3")
 
+
 def show_all_users(user_list):
+    """ Displays all users and allows for user selection to 'log in'. """
     if len(user_list) == 0:
         print("No users")
         input("Press ENTER to go back")
@@ -102,6 +104,7 @@ def load_test_users(user_list):
     user_3.add_budget(50.0, BudgetCategory.EATING_OUT)
     user_3.add_budget(50.0, BudgetCategory.MISC)
     user_list.add_user(user_3)
+
 
 if __name__ == "__main__":
     main()

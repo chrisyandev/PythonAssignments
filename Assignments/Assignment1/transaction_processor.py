@@ -23,7 +23,7 @@ class TransactionProcessor:
 
         if not bank_account.check_transaction(transaction):
             return False
-        elif not budget.check_transaction(transaction):
+        elif not budget.check_transaction():
             return False
         else:
             bank_account.execute_transaction(transaction)

@@ -27,6 +27,7 @@ class User(ABC):
         self.__next_id += 1
 
     def show_user_menu(self):
+        """ Shows the operations the user can perform. """
         user_input = None
 
         while user_input != 5:
@@ -67,7 +68,6 @@ class User(ABC):
     def initiate_transaction(self):
         """
         Starts a transaction process. Lets the user pick a budget category.
-        :return: none
         """
         user_input = None
 
@@ -105,6 +105,10 @@ class User(ABC):
                 print("Please enter a number from 1-5")
 
     def view_transactions_by_budget(self):
+        """
+        Shows the user all transactions for a budget category of their
+        choice.
+        """
         user_input = None
         while user_input != 5:
             print("View transactions for which category?")
@@ -156,9 +160,19 @@ class User(ABC):
         return None
 
     def get_all_budgets(self):
+        """
+        Retrieves the list of Budgets.
+        :return: a list
+        """
         return self._budget_list
 
     def add_budget(self, budget_amount, category):
+        """
+        Creates and adds a new Budget.
+        :param budget_amount: a float
+        :param category: a BudgetCategory
+        :return: none
+        """
         self._budget_list.append(Budget(budget_amount, category, self))
 
     def print_all_budgets(self):
@@ -186,6 +200,10 @@ class User(ABC):
         return self._name
 
     def __str__(self):
+        """
+        Formats the details of this User as a string.
+        :return: a string
+        """
         return f"Name: {self._name}\n" \
                f"Age: {self._age}\n" \
                f"User type: {self._user_type.name}\n"

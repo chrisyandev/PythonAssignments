@@ -1,6 +1,14 @@
 class BudgetManager:
+    """
+    Determines when to send notifications and warnings by
+    comparing budget amounts with User's limits.
+    """
 
     def __init__(self, budget, user):
+        """
+        :param budget: a Budget
+        :param user: a User
+        """
         self._budget = budget
         self._user = user
         self._do_notify = True
@@ -9,6 +17,10 @@ class BudgetManager:
         self._budget_locked_count = 0
 
     def trigger(self):
+        """
+        Calls a sequence of methods. Shows the budget category's
+        transactions if either a warning or notification is triggered.
+        """
         if self._do_warn:
             self.warn()
         if self._do_notify:
@@ -21,6 +33,7 @@ class BudgetManager:
             self._show_transactions = False
 
     def notify(self):
+        """ Displays notification if amount spent exceeds limit. """
         amount_spent = self._budget.amount_spent
         total_amount = self._budget.total_amount
         category_name = self._budget.category.name
@@ -34,6 +47,7 @@ class BudgetManager:
                 self._do_notify = False
 
     def warn(self):
+        """ Displays warning if amount spent exceeds a threshold. """
         amount_spent = self._budget.amount_spent
         total_amount = self._budget.total_amount
         category_name = self._budget.category.name
@@ -48,6 +62,7 @@ class BudgetManager:
                 self._do_warn = False
 
     def lock_budget_if_exceed(self):
+        """ Locks the budget category if amount spent exceeds a limit. """
         budget_lock_threshold = self._user.__class__.budget_lock_threshold
         if budget_lock_threshold is not None:
             amount_spent = self._budget.amount_spent
@@ -62,6 +77,7 @@ class BudgetManager:
                 self.lock_account_if_exceed()
 
     def lock_account_if_exceed(self):
+        """ Locks all budgets if too many categories get locked. """
         account_lock_threshold = self._user.__class__.account_lock_threshold
         if account_lock_threshold is not None:
             if self._budget_locked_count >= account_lock_threshold:
