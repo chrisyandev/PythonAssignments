@@ -55,7 +55,7 @@ class UserList:
 
         new_user = UserFactory.create_user(name=name, age=age, user_type=user_type, bank_account=bank_account)
         self.__set_up_budgets(new_user)
-        self._user_list.append(new_user)
+        self.add_user(new_user)
 
         new_user.show_user_menu()
 
@@ -69,7 +69,10 @@ class UserList:
                 except ValueError:
                     print("Must be a number")
                     continue
-            user.add_budget(Budget(budget_amount, category))
+            user.add_budget(budget_amount, category)
+
+    def add_user(self, user):
+        self._user_list.append(user)
 
     def delete_user(self, user_id):
         for user in self._user_list:

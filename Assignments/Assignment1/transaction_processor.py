@@ -10,18 +10,22 @@ class TransactionProcessor:
         Makes sure both the Budget and BankAccount allows for the Transaction
         to execute before actually executing it.
         """
-        amount = float(input("Enter amount: "))
+        amount = None
+        while amount is None:
+            try:
+                amount = float(input("Enter amount: "))
+            except ValueError:
+                print("Must be a number")
+                continue
         shop = input("Enter shop/website name: ")
 
         transaction = Transaction(amount, budget.category, shop)
 
-        if not budget.check_transaction(transaction):
+        if not bank_account.check_transaction(transaction):
             return False
-        elif not bank_account.check_transaction(transaction):
+        elif not budget.check_transaction(transaction):
             return False
         else:
-            budget.execute_transaction(transaction)
             bank_account.execute_transaction(transaction)
-            print("Transaction successful")
-            print(transaction)
+            budget.execute_transaction(transaction)
             return True

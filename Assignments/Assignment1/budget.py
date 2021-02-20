@@ -1,24 +1,25 @@
+from budget_manager import BudgetManager
+
 class Budget:
     """
     Represents a limit of how much a User can spend for a certain category.
     """
 
-    def __init__(self, total_amount, category):
+    def __init__(self, total_amount, category, user):
         """
         :param total_amount: a float
         :param category: a BudgetCategory
+        :param user: a User
         """
         self._transaction_list = []
         self._total_amount = total_amount
         self._amount_spent = 0
         self._locked = False
         self._category = category
+        self._budget_manager = BudgetManager(self, user)
 
-    # Checks if request can be fulfilled without exceeding budget
-    def __will_exceed_budget(self, spending):
-        if (spending + self._amount_spent) > self._total_amount:
-            return True
-        return False
+    def set_lock(self, do_lock):
+        self._locked = do_lock
 
     def check_transaction(self, transaction):
         """
@@ -28,10 +29,6 @@ class Budget:
         """
         if self._locked:
             print(f"Category {self._category.name} is locked")
-            return False
-        if self.__will_exceed_budget(transaction.amount):
-            print(f"Cannot execute transaction because it will "
-                  f"exceed your budget for {self._category.name}")
             return False
         return True
 
@@ -43,6 +40,9 @@ class Budget:
         """
         self._amount_spent += transaction.amount
         self._transaction_list.append(transaction)
+        print("Transaction successful")
+        print(transaction)
+        self._budget_manager.trigger()
 
     def print_all_transactions(self):
         print(f"--- All transactions for {self._category.name} ---")
@@ -56,6 +56,14 @@ class Budget:
         :return: a string
         """
         return self._category
+
+    @property
+    def amount_spent(self):
+        return self._amount_spent
+
+    @property
+    def total_amount(self):
+        return self._total_amount
 
     def __str__(self):
         """

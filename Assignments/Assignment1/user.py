@@ -155,8 +155,11 @@ class User(ABC):
                 return b
         return None
 
-    def add_budget(self, budget):
-        self._budget_list.append(budget)
+    def get_all_budgets(self):
+        return self._budget_list
+
+    def add_budget(self, budget_amount, category):
+        self._budget_list.append(Budget(budget_amount, category, self))
 
     def print_all_budgets(self):
         """

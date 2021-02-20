@@ -4,6 +4,12 @@ from user import User
 class Rebel(User):
     """ Represents a child that behaves very poorly. """
 
+    warning_threshold = 0.50
+    budget_lock_threshold = 1
+    account_lock_threshold = 2
+    warn_once = False
+    notify_once = False
+
     def __init__(self, name, age, user_type, bank_account):
         """
         :param name: a string
