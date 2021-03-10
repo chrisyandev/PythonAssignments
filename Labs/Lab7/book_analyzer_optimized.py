@@ -4,6 +4,8 @@ that you won't find this in the workplace) BookAnalyzer class that needs
 to be profiled and optimized.
 """
 
+import itertools
+
 
 class BookAnalyzer:
     """
@@ -12,8 +14,18 @@ class BookAnalyzer:
     only once.
     """
 
-    # a constant to help filter out common punctuation.
-    COMMON_PUNCTUATION = [",", "*", ";", ".", ":","(", "[", "]", ")"]
+    # a dict of common punctuation to be used with translate()
+    COMMON_PUNCTUATION = {
+        ord(','): '',
+        ord('*'): '',
+        ord(';'): '',
+        ord('.'): '',
+        ord(':'): '',
+        ord('('): '',
+        ord('['): '',
+        ord(']'): '',
+        ord(')'): ''
+    }
 
     def __init__(self):
         self.text = None
@@ -30,27 +42,16 @@ class BookAnalyzer:
             self.text = book_file.readlines()
 
         # strip out empty lines
-        stripped_text = []
-        for line in self.text:
-            if line != "\n":
-                stripped_text.append(line)
-        self.text = stripped_text
+        self.text = filter(lambda line: line != "\n", self.text)
 
         # convert list of lines to list of words
-        words = []
-        for line in self.text:
-            words += line.split()
-        self.text = words
+        words = map(lambda line: line.split(), self.text)
+        self.text = list(itertools.chain.from_iterable(words))
 
-        # remove common punctuation from words
-        # change all words to lowercase
-        temp_text = []
-        for word in self.text:
-            temp_word = word
-            for punctuation in self.COMMON_PUNCTUATION:
-                temp_word = temp_word.replace(punctuation, '')
-            temp_text.append(temp_word.lower())
-        self.text = temp_text
+        # remove common punctuation from words, change all words to lowercase
+        # self.text assigned a set
+        self.text = {word.translate(self.COMMON_PUNCTUATION).lower()
+                     for word in self.text}
 
     @staticmethod
     def is_unique(word, word_list):
@@ -61,9 +62,8 @@ class BookAnalyzer:
         :param word_list: a sequence of words
         :return: True if not found, false otherwise
         """
-        for a_word in word_list:
-            if word == a_word:
-                return False
+        if word in word_list:
+            return False
         return True
 
     def find_unique_words(self):
