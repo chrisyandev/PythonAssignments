@@ -12,7 +12,7 @@ class Library:
     interface for users to check out, return and find items.
     """
     def __init__(self):
-        self._catalogue_list = []
+        self._catalogue_dict = {}
 
     def show_catalogues(self):
         """
@@ -119,7 +119,7 @@ class Library:
         Display all the items in the library.
         :return: none
         """
-        for catalogue in self._catalogue_list:
+        for key, catalogue in self._catalogue_dict.items():
             print(f"{catalogue.item_type.title()}")
             print("--------------", end="\n")
             for item in catalogue.items:
@@ -139,15 +139,15 @@ class Library:
 
     def add_catalogue(self, catalogue):
         """
-        Adds a catalogue to the library.
+        Adds a catalogue to the library if it doesn't exist already.
         :param catalogue: a Catalogue object
         :return: a boolean
         """
-        for c in self._catalogue_list:
-            if c.item_type == catalogue.item_type:
-                return False
-        self._catalogue_list.append(catalogue)
-        return True
+        if self._catalogue_dict.get(catalogue.item_type) is not None:
+            return False
+        else:
+            self._catalogue_dict[catalogue.item_type] = catalogue
+            return True
 
     def get_catalogue(self, item_type):
         """
@@ -155,11 +155,10 @@ class Library:
         :param item_type: name of the Catalogue as a string
         :return: a Catalogue object or None if not found
         """
-        for c in self._catalogue_list:
-            if c.item_type == item_type.lower():
-                return c
-        print(f"Catalogue {item_type.title()} not found")
-        return None
+        catalogue = self._catalogue_dict.get(item_type.lower())
+        if catalogue is None:
+            print(f"Catalogue {item_type.title()} not found")
+        return catalogue
 
     class Catalogue:
         """
