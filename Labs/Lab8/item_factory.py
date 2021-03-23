@@ -1,26 +1,19 @@
+from abc import *
 from book import Book
 from journal import Journal
 from dvd import DVD
 
 
-class LibraryItemGenerator:
-    """A factory class used to create different types of Items."""
-    @classmethod
-    def generate_item(cls, item_type):
-        """
-        Determines which type of object to generate.
-        :param item_type: a string
-        :return: an object
-        """
-        if item_type.lower() == "books":
-            return cls.create_book()
-        if item_type.lower() == "journals":
-            return cls.create_journal()
-        if item_type.lower() == "dvds":
-            return cls.create_dvd()
+class ItemFactory(ABC):
 
-    @staticmethod
-    def create_book():
+    @abstractmethod
+    def create_item(self):
+        pass
+
+
+class BookItemFactory(ItemFactory):
+
+    def create_item(self):
         """
         Creates a Book object.
         :return: a Book object
@@ -32,8 +25,10 @@ class LibraryItemGenerator:
         author = input("Enter Author Name: ")
         return Book(call_number, title, num_copies, author)
 
-    @staticmethod
-    def create_journal():
+
+class JournalItemFactory(ItemFactory):
+
+    def create_item(self):
         """
         Creates a Journal object.
         :return: a Journal object
@@ -46,8 +41,10 @@ class LibraryItemGenerator:
         publisher = input("Enter publisher: ")
         return Journal(call_number, title, num_copies, issue_num, publisher)
 
-    @staticmethod
-    def create_dvd():
+
+class DvdItemFactory(ItemFactory):
+
+    def create_item(self):
         """
         Creates a DVD object.
         :return: a DVD object
@@ -59,3 +56,11 @@ class LibraryItemGenerator:
         release_date = input("Enter release date: ")
         region_code = input("Enter region code: ")
         return DVD(call_number, title, num_copies, release_date, region_code)
+
+
+class FactoryTypes:
+    factory_types = {
+        "books": BookItemFactory,
+        "journals": JournalItemFactory,
+        "dvds": DvdItemFactory
+    }

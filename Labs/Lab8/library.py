@@ -1,6 +1,6 @@
 """ This module houses the library"""
 import difflib
-from library_item_generator import LibraryItemGenerator
+from item_factory import FactoryTypes
 from book import Book
 from journal import Journal
 from dvd import DVD
@@ -196,7 +196,8 @@ class Library:
             """
             Add an item to the library with a unique call number.
             """
-            new_item = LibraryItemGenerator.generate_item(self._type)
+            item_factory = FactoryTypes.factory_types[self._type]()
+            new_item = item_factory.create_item()
             found_item = self._retrieve_item_by_call_number(
                 new_item.call_number)
             if found_item:
