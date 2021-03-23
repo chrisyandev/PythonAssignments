@@ -170,7 +170,7 @@ class Library:
             :param item_type: a string
             """
             self._type = item_type.lower()
-            self._item_list = []
+            self._item_dict = {}
 
         def _retrieve_item_by_call_number(self, call_number):
             """
@@ -179,12 +179,7 @@ class Library:
             :param call_number: a string
             :return: Item object if found, None otherwise
             """
-            found_item = None
-            for item in self._item_list:
-                if item.call_number == call_number:
-                    found_item = item
-                    break
-            return found_item
+            return self._item_dict.get(call_number)
 
         def find_items(self, title):
             """
@@ -192,9 +187,7 @@ class Library:
             :param title: a string
             :return: a list of titles.
             """
-            title_list = []
-            for item in self._item_list:
-                title_list.append(item.title)
+            title_list = [item.title for key, item in self._item_dict.items()]
             results = difflib.get_close_matches(title, title_list,
                                                 cutoff=0.5)
             return results
@@ -210,7 +203,7 @@ class Library:
                 print(f"Could not add item with call number "
                       f"{new_item.call_number}. It already exists. ")
             else:
-                self._item_list.append(new_item)
+                self._item_dict[new_item.call_number] = new_item
                 print("item added successfully! item details:")
                 print(new_item)
 
@@ -222,7 +215,7 @@ class Library:
             """
             found_item = self._retrieve_item_by_call_number(call_number)
             if found_item:
-                self._item_list.remove(found_item)
+                self._item_dict.pop(call_number)
                 print(f"Successfully removed {found_item.title} with "
                       f"call number: {call_number}")
             else:
@@ -294,10 +287,10 @@ class Library:
         @property
         def items(self):
             """
-            Gets the list of items in this catalogue.
+            Gets a list of Items from the dict of Items in this catalogue.
             :return: a List
             """
-            return self._item_list
+            return [item for key, item in self._item_dict.items()]
 
         @property
         def item_type(self):
@@ -307,6 +300,8 @@ class Library:
             """
             return self._type
 
+        def get_item_dict(self):
+            return self._item_dict
 
 def main():
     """
@@ -338,13 +333,13 @@ def main():
     ]
 
     for book in book_list:
-        books.items.append(book)
+        books.get_item_dict()[book.call_number] = book
 
     for journal in journal_list:
-        journals.items.append(journal)
+        journals.get_item_dict()[journal.call_number] = journal
 
     for dvd in dvd_list:
-        dvds.items.append(dvd)
+        dvds.get_item_dict()[dvd.call_number] = dvd
 
     library.show_catalogues()
 
