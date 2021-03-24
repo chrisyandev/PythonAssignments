@@ -7,7 +7,7 @@ class Book(Item):
     it's call number.
     """
 
-    def __init__(self, call_num, title, num_copies, author):
+    def __init__(self, author, **kwargs):
         """
         :param call_num: a string
         :param title: a string
@@ -16,7 +16,7 @@ class Book(Item):
         :precondition call_num: a unique identifier
         :precondition num_copies: a positive integer
         """
-        super().__init__(call_num, title, num_copies)
+        super().__init__(**kwargs)
         self._author = author
 
     @property

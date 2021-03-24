@@ -6,6 +6,12 @@ from dvd import DVD
 
 class ItemFactory(ABC):
 
+    def __init__(self):
+        self.call_num = input("Enter Call Number: ")
+        self.title = input("Enter title: ")
+        self.num_copies = int(input("Enter number of copies "
+                                    "(positive number): "))
+
     @abstractmethod
     def create_item(self):
         pass
@@ -18,12 +24,9 @@ class BookItemFactory(ItemFactory):
         Creates a Book object.
         :return: a Book object
         """
-        call_number = input("Enter Call Number: ")
-        title = input("Enter title: ")
-        num_copies = int(input("Enter number of copies "
-                               "(positive number): "))
         author = input("Enter Author Name: ")
-        return Book(call_number, title, num_copies, author)
+        return Book(author, call_num=self.call_num, title=self.title,
+                    num_copies=self.num_copies)
 
 
 class JournalItemFactory(ItemFactory):
@@ -33,13 +36,10 @@ class JournalItemFactory(ItemFactory):
         Creates a Journal object.
         :return: a Journal object
         """
-        call_number = input("Enter Call Number: ")
-        title = input("Enter title: ")
-        num_copies = int(input("Enter number of copies "
-                               "(positive number): "))
         issue_num = input("Enter issue number: ")
         publisher = input("Enter publisher: ")
-        return Journal(call_number, title, num_copies, issue_num, publisher)
+        return Journal(issue_num, publisher, call_num=self.call_num,
+                       title=self.title, num_copies=self.num_copies)
 
 
 class DvdItemFactory(ItemFactory):
@@ -49,13 +49,10 @@ class DvdItemFactory(ItemFactory):
         Creates a DVD object.
         :return: a DVD object
         """
-        call_number = input("Enter Call Number: ")
-        title = input("Enter title: ")
-        num_copies = int(input("Enter number of copies "
-                               "(positive number): "))
         release_date = input("Enter release date: ")
         region_code = input("Enter region code: ")
-        return DVD(call_number, title, num_copies, release_date, region_code)
+        return DVD(release_date, region_code, call_num=self.call_num,
+                   title=self.title, num_copies=self.num_copies)
 
 
 class FactoryTypes:

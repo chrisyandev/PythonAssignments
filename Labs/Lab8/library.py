@@ -317,20 +317,20 @@ def main():
     library.add_catalogue(dvds)
 
     book_list = [
-        Book("100.200.300", "Harry Potter 1", 2, "J K Rowling"),
-        Book("999.224.854", "Harry Potter 2", 5, "J K Rowling"),
-        Book("631.495.302", "Harry Potter 3", 4, "J K Rowling"),
-        Book("123.02.204", "The Cat in the Hat", 1, "Dr. Seuss")
+        Book("J K Rowling", call_num="100.200.300", title="Harry Potter 1", num_copies=2),
+        Book("J K Rowling", call_num="999.224.854", title="Harry Potter 2", num_copies=5),
+        Book("J K Rowling", call_num="631.495.302", title="Harry Potter 3", num_copies=4),
+        Book("Dr. Seuss", call_num="123.02.204", title="The Cat in the Hat", num_copies=1,)
     ]
 
     journal_list = [
-        Journal("101.201.301", "Someone's Journal", 3, 50, "Mr Publisher"),
-        Journal("640.450.200", "Random Journal", 1, 28, "The Best")
+        Journal(50, "Mr Publisher", call_num="101.201.301", title="Someone's Journal", num_copies=3),
+        Journal(28, "The Best", call_num="640.450.200", title="Random Journal", num_copies=1)
     ]
 
     dvd_list = [
-        DVD("980.242.580", "Rock Music", 5, "1/1/2007", 1),
-        DVD("222.333.444", "Classical Music", 6, "5/20/2010", 2)
+        DVD("1/1/2007", 1, call_num="980.242.580", title="Rock Music", num_copies=5),
+        DVD("5/20/2010", 2, call_num="222.333.444", title="Classical Music", num_copies=6)
     ]
 
     for book in book_list:

@@ -3,7 +3,7 @@ from item import Item
 
 class Journal(Item):
     """Represents a journal that will be added to a library."""
-    def __init__(self, call_num, title, num_copies, issue_num, publisher):
+    def __init__(self, issue_num, publisher, **kwargs):
         """
         :param call_num: a string
         :param title: a string
@@ -11,7 +11,7 @@ class Journal(Item):
         :param issue_num: an integer
         :param publisher: a string
         """
-        super().__init__(call_num, title, num_copies)
+        super().__init__(**kwargs)
         self._issue_num = issue_num
         self._publisher = publisher
 

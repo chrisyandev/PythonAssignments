@@ -3,7 +3,7 @@ from item import Item
 
 class DVD(Item):
     """Represents a DVD that will be added to a library."""
-    def __init__(self, call_num, title, num_copies, release_date, region_code):
+    def __init__(self, release_date, region_code, **kwargs):
         """
         :param call_num: a string
         :param title: a string
@@ -11,7 +11,7 @@ class DVD(Item):
         :param release_date: a string
         :param region_code: an integer
         """
-        super().__init__(call_num, title, num_copies)
+        super().__init__(**kwargs)
         self._release_date = release_date
         self._region_code = region_code
 
