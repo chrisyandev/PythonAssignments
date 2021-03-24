@@ -5,6 +5,7 @@ from dvd import DVD
 
 
 class ItemFactory(ABC):
+    """ Creates different types of Items. """
 
     def __init__(self):
         self.call_num = input("Enter Call Number: ")
@@ -14,6 +15,10 @@ class ItemFactory(ABC):
 
     @abstractmethod
     def create_item(self):
+        """
+        Asks for user input then creates an Item from it.
+        :return: Object that is subtype of Item
+        """
         pass
 
 
@@ -56,6 +61,8 @@ class DvdItemFactory(ItemFactory):
 
 
 class FactoryTypes:
+    """ Matches category types to their respective ItemFactory. """
+
     factory_types = {
         "books": BookItemFactory,
         "journals": JournalItemFactory,

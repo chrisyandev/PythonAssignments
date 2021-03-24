@@ -302,6 +302,10 @@ class Library:
             return self._type
 
         def get_item_dict(self):
+            """
+            Gets the dict of Items.
+            :return:
+            """
             return self._item_dict
 
 def main():
