@@ -1,19 +1,20 @@
 from toy import *
 from candy import *
 from stuffed_animal import *
-from inventory import Inventory
-from item_factory import *
+from store import Store
+from item_factory import ItemFactoryType
+from order import *
 
 
 def main():
-    test_items()
+    store = Store()
+    test_items(store)
     test_factories()
+    OrderProcessor.process("orders.xlsx", store)
+    store.print_orders()
 
 
-
-def test_items():
-    inventory = Inventory()
-
+def test_items(store):
     robot_bunny = RobotBunny(product_id="123ABC", name="Robot Bunny", desc="This is a robot bunny.", quantity=5, min_age=1, num_sfx=2, color_str="pink")
     rc_spider = RCSpider(product_id="456DEF", name="RC Spider", desc="This is a remote controlled spider.", quantity=9, min_age=12, speed=30, jump_height=20, has_glow=False, spider_type_str="tarantula")
     santas_workshop = SantasWorkshop(product_id="789GHI", name="Santa's Workshop", desc="This is a doll house.", quantity=15, min_age=6, width=10, height=15, num_rooms=8)
@@ -28,8 +29,8 @@ def test_items():
 
     items = [robot_bunny, rc_spider, santas_workshop, easter_bunny, dancing_skeleton, reindeer, creme_eggs, pumpkin_caramel_toffee, candy_canes]
     for i in items:
-        inventory._item_dict[i.product_id] = i
-    inventory.check_inventory()
+        store._inventory[i.product_id] = i
+    store.check_inventory()
 
 
 def test_factories():
