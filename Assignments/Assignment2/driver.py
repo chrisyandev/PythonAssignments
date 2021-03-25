@@ -2,10 +2,13 @@ from toy import *
 from candy import *
 from stuffed_animal import *
 from inventory import Inventory
+from item_factory import *
 
 
 def main():
     test_items()
+    test_factories()
+
 
 
 def test_items():
@@ -27,6 +30,17 @@ def test_items():
     for i in items:
         inventory._item_dict[i.product_id] = i
     inventory.check_inventory()
+
+
+def test_factories():
+    easter_factory = ItemFactoryType.get_factory("easter")
+    halloween_factory = ItemFactoryType.get_factory("halloween")
+    christmas_factory = ItemFactoryType.get_factory("christmas")
+    factories = [easter_factory, halloween_factory, christmas_factory]
+    for factory in factories:
+        factory.create_toy()
+        factory.create_candy()
+        factory.create_stuffed_animal()
 
 
 if __name__ == '__main__':
