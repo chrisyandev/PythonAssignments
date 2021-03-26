@@ -29,15 +29,15 @@ class CremeEggs(Candy):
 
 class PumpkinCaramelToffee(Candy):
 
-    class Flavor(Enum):
+    class Variety(Enum):
         SEA_SALT = "sea salt"
         REGULAR = "regular"
 
     def __init__(self, **kwargs):
         """
-        :param kwargs: product_id, name, desc, quantity, flavor_str
+        :param kwargs: product_id, name, desc, quantity, variety
         """
-        self._flavor = self.Flavor(kwargs.pop("flavor_str"))
+        self._flavor = self.Variety(kwargs.pop("variety").lower())
         kwargs["has_nuts"] = True
         kwargs["has_lactose"] = True
         super().__init__(**kwargs)
@@ -45,15 +45,15 @@ class PumpkinCaramelToffee(Candy):
 
 class CandyCanes(Candy):
 
-    class StripeColor(Enum):
+    class Colour(Enum):
         RED = "red"
         GREEN = "green"
 
     def __init__(self, **kwargs):
         """
-        :param kwargs: product_id, name, desc, quantity, stripe_color_str
+        :param kwargs: product_id, name, desc, quantity, colour
         """
-        self._stripe_color = self.StripeColor(kwargs.pop("stripe_color_str"))
+        self._colour = self.Colour(kwargs.pop("colour").lower())
         kwargs["has_nuts"] = False
         kwargs["has_lactose"] = False
         super().__init__(**kwargs)

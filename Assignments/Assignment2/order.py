@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from item_factory import *
 import pandas as pd
 
@@ -16,18 +18,44 @@ class Order:
         return self._order_num
 
     @property
+    def product_id(self):
+        return self._product_id
+
+    @property
+    def product_details(self):
+        return self._product_details
+
+    @property
+    def item_type(self):
+        return self._item_type
+
+    @property
     def item_name(self):
         return self._item_name
 
+    @property
+    def factory(self):
+        return self._factory
+
 
 class OrderProcessor:
+
     @staticmethod
-    def process(file_name, store):
+    def process(store):
+        file_name = input("Excel file name: ")
+        my_file = Path(file_name)
+        if not my_file.is_file():
+            print("File does not exist")
+            return OrderProcessor.process(store)
+        elif not file_name.endswith(".xlsx"):
+            print("File must be .xlsx")
+            return OrderProcessor.process(store)
+
         df = pd.read_excel(file_name)
         for x in range(0, len(df.index)):
             product_details = {
                 "quantity": df["quantity"][x],
-                "description": df["description"][x],
+                "desc": df["description"][x],
                 "has_batteries": df["has_batteries"][x],
                 "min_age": df["min_age"][x],
                 "dimensions": df["dimensions"][x],
@@ -46,9 +74,9 @@ class OrderProcessor:
                 "size": df["size"][x],
                 "fabric": df["fabric"][x]
             }
-            factory = ItemFactoryType.get_factory(df["holiday"][x].lower())
+            factory = ItemFactoryMapper.get_factory(df["holiday"][x])
             new_order = Order(df["order_number"][x], df["product_id"][x],
                               df["item"][x], df["name"][x], product_details, factory)
             store.receive_order(new_order)
 
-
+        # store.print_orders()

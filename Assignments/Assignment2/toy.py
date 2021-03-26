@@ -17,17 +17,17 @@ class Toy(Item, ABC):
 
 class RobotBunny(Toy):
 
-    class Color(Enum):
+    class Colour(Enum):
         ORANGE = "orange"
         BLUE = "blue"
         PINK = "pink"
 
     def __init__(self, **kwargs):
         """
-        :param kwargs: product_id, name, desc, quantity, min_age, num_sfx, color_str
+        :param kwargs: product_id, name, desc, quantity, min_age, num_sound, colour
         """
-        self._num_sfx = kwargs.pop("num_sfx")
-        self._color = self.Color(kwargs.pop("color_str"))
+        self._num_sfx = kwargs.pop("num_sound")
+        self._colour = self.Colour(kwargs.pop("colour").lower())
         kwargs["has_batteries"] = True
         super().__init__(**kwargs)
 
@@ -40,12 +40,12 @@ class RCSpider(Toy):
 
     def __init__(self, **kwargs):
         """
-        :param kwargs: product_id, name, desc, quantity, min_age, speed, jump_height, has_glow, spider_type_str
+        :param kwargs: product_id, name, desc, quantity, min_age, speed, jump_height, has_glow, spider_type
         """
         self._speed = kwargs.pop("speed")
         self._jump_height = kwargs.pop("jump_height")
         self._has_glow = kwargs.pop("has_glow")
-        self._spider_type = self.SpiderType(kwargs.pop("spider_type_str"))
+        self._spider_type = self.SpiderType(kwargs.pop("spider_type").lower())
         kwargs["has_batteries"] = True
         super().__init__(**kwargs)
 
@@ -53,10 +53,9 @@ class RCSpider(Toy):
 class SantasWorkshop(Toy):
     def __init__(self, **kwargs):
         """
-        :param kwargs: product_id, name, desc, quantity, min_age, width, height, num_rooms
+        :param kwargs: product_id, name, desc, quantity, min_age, dimensions, num_rooms
         """
-        self._width = kwargs.pop("width")
-        self._height = kwargs.pop("height")
+        self._dimensions = kwargs.pop("dimensions")
         self._num_rooms = kwargs.pop("num_rooms")
         kwargs["has_batteries"] = False
         super().__init__(**kwargs)
