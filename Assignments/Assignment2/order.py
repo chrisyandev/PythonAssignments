@@ -37,6 +37,16 @@ class Order:
     def factory(self):
         return self._factory
 
+    def __str__(self):
+        strings = (
+            "Order " + str(self._order_num),
+            "Item " + self._item_type.title(),
+            "Product ID " + self._product_id,
+            'Name "' + self._item_name + '"',
+            "Quantity " + str(self._product_details["quantity"])
+        )
+        return ", ".join(strings)
+
 
 class OrderProcessor:
 

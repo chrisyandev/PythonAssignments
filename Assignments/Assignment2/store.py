@@ -1,3 +1,5 @@
+import datetime
+
 from order import *
 
 
@@ -20,7 +22,6 @@ class Store:
             item_properties["product_id"] = order.product_id
             new_item = item_type_to_create(**item_properties)
             self._inventory[new_item.product_id] = new_item
-
         else:
             while target_item.quantity < order_quantity:
                 target_item.quantity += 100
@@ -30,6 +31,15 @@ class Store:
     def print_orders(self):
         for order_num, order in self._orders.items():
             print(order_num, order.item_name)
+
+    def create_daily_transaction_report(self):
+        current_time = datetime.datetime.now()
+        file_name = current_time.strftime("DTR_%d%m%y_%H%M.txt")
+        with open(file_name, mode='w', encoding="utf-8") as report:
+            report.write("HOLIDAY STORE - DAILY TRANSACTION REPORT (DRT)\n")
+            report.write(current_time.strftime("%d-%m-%Y %H:%M\n"))
+            for order_num, order in self._orders.items():
+                report.write(order.__str__() + "\n")
 
     def show_user_menu(self):
         """ Displayed on program start. """
@@ -54,6 +64,6 @@ class Store:
             elif user_input == 2:
                 self.check_inventory()
             elif user_input == 3:
-                pass
+                self.create_daily_transaction_report()
             else:
                 print("Please enter a number from 1-3")
