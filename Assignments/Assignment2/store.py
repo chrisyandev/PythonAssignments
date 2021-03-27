@@ -1,6 +1,7 @@
 import datetime
 
 from order import *
+from custom_exceptions import *
 
 
 class Store:
@@ -20,8 +21,11 @@ class Store:
             item_properties = order.product_details
             item_properties["name"] = order.item_name
             item_properties["product_id"] = order.product_id
-            new_item = item_type_to_create(**item_properties)
-            self._inventory[new_item.product_id] = new_item
+            try:
+                new_item = item_type_to_create(**item_properties)
+                self._inventory[new_item.product_id] = new_item
+            except OrderProcessError as e:
+                print(e)
         else:
             while target_item.quantity < order_quantity:
                 target_item.quantity += 100

@@ -1,6 +1,7 @@
 from item import Item
 from abc import *
 from enum import *
+from custom_exceptions import *
 
 
 class Toy(Item, ABC):
@@ -27,7 +28,11 @@ class RobotBunny(Toy):
         :param kwargs: product_id, name, desc, quantity, min_age, num_sound, colour
         """
         self._num_sfx = kwargs.pop("num_sound")
-        self._colour = self.Colour(kwargs.pop("colour").lower())
+        try:
+            string = kwargs.pop("colour").lower()
+            self._colour = self.Colour(string)
+        except ValueError:
+            raise InvalidColourError(string)
         kwargs["has_batteries"] = True
         super().__init__(**kwargs)
 
@@ -45,7 +50,11 @@ class RCSpider(Toy):
         self._speed = kwargs.pop("speed")
         self._jump_height = kwargs.pop("jump_height")
         self._has_glow = kwargs.pop("has_glow")
-        self._spider_type = self.SpiderType(kwargs.pop("spider_type").lower())
+        try:
+            string = kwargs.pop("spider_type").lower()
+            self._spider_type = self.SpiderType(string)
+        except ValueError:
+            raise InvalidSpiderTypeError(string)
         kwargs["has_batteries"] = True
         super().__init__(**kwargs)
 

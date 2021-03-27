@@ -1,6 +1,7 @@
 from item import Item
 from abc import *
 from enum import *
+from custom_exceptions import *
 
 
 class Candy(Item, ABC):
@@ -37,7 +38,11 @@ class PumpkinCaramelToffee(Candy):
         """
         :param kwargs: product_id, name, desc, quantity, variety
         """
-        self._flavor = self.Variety(kwargs.pop("variety").lower())
+        try:
+            string = kwargs.pop("variety").lower()
+            self._variety = self.Variety(string)
+        except ValueError:
+            raise InvalidVarietyError(string)
         kwargs["has_nuts"] = True
         kwargs["has_lactose"] = True
         super().__init__(**kwargs)
@@ -53,7 +58,11 @@ class CandyCanes(Candy):
         """
         :param kwargs: product_id, name, desc, quantity, colour
         """
-        self._colour = self.Colour(kwargs.pop("colour").lower())
+        try:
+            string = kwargs.pop("colour").lower()
+            self._colour = self.Colour(string)
+        except ValueError:
+            raise InvalidColourError(string)
         kwargs["has_nuts"] = False
         kwargs["has_lactose"] = False
         super().__init__(**kwargs)

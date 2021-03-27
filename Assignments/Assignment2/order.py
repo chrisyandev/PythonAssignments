@@ -89,4 +89,3 @@ class OrderProcessor:
                               df["item"][x], df["name"][x], product_details, factory)
             store.receive_order(new_order)
 
-        # store.print_orders()

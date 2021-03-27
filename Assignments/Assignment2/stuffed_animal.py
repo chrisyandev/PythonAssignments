@@ -1,6 +1,7 @@
 from item import Item
 from enum import *
 from abc import *
+from custom_exceptions import *
 
 
 class StuffedAnimal(Item, ABC):
@@ -24,7 +25,11 @@ class StuffedAnimal(Item, ABC):
         """
         :param kwargs: product_id, name, desc, quantity, size, fabric, stuffing
         """
-        self._size = self.Size(kwargs.pop("size").lower())
+        try:
+            string = kwargs.pop("size").lower()
+            self._size = self.Size(string)
+        except ValueError:
+            raise InvalidSizeError(string)
         self._fabric = kwargs.pop("fabric")
         self._stuffing = kwargs.pop("stuffing")
         super().__init__(**kwargs)
@@ -42,7 +47,11 @@ class EasterBunny(StuffedAnimal):
         """
         :param kwargs: product_id, name, desc, quantity, size, colour
         """
-        self._colour = self.Colour(kwargs.pop("colour").lower())
+        try:
+            string = kwargs.pop("colour").lower()
+            self._colour = self.Colour(string)
+        except ValueError:
+            raise InvalidColourError(string)
         kwargs["fabric"] = self.Fabric.LINEN
         kwargs["stuffing"] = self.Stuffing.POLYESTER_FIBREFILL
         super().__init__(**kwargs)
