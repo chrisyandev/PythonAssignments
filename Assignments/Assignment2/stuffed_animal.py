@@ -5,17 +5,21 @@ from custom_exceptions import *
 
 
 class StuffedAnimal(Item, ABC):
+    """ Represents a stuffed animal item. """
 
     class Fabric(Enum):
+        """ Types of fabric the stuffed animal can be made of. """
         LINEN = "linen"
         COTTON = "cotton"
         ACRYLIC = "acrylic"
 
     class Stuffing(Enum):
+        """ Types of stuffing the stuffed animal can contain. """
         POLYESTER_FIBREFILL = "polyester fibrefill"
         WOOL = "wool"
 
     class Size(Enum):
+        """ Different sizes of the stuffed animal. """
         SMALL = "s"
         MEDIUM = "m"
         LARGE = "l"
@@ -36,8 +40,10 @@ class StuffedAnimal(Item, ABC):
 
 
 class EasterBunny(StuffedAnimal):
+    """ Represents an Easter stuffed animal. """
 
     class Colour(Enum):
+        """ Different colours the easter bunny can be. """
         WHITE = "white"
         GREY = "grey"
         PINK = "pink"
@@ -58,6 +64,7 @@ class EasterBunny(StuffedAnimal):
 
 
 class DancingSkeleton(StuffedAnimal):
+    """ Represents a Halloween stuffed animal. """
 
     def __init__(self, **kwargs):
         """
@@ -70,6 +77,7 @@ class DancingSkeleton(StuffedAnimal):
 
 
 class Reindeer(StuffedAnimal):
+    """ Represents a Christmas stuffed animal. """
 
     def __init__(self, **kwargs):
         """

@@ -5,15 +5,31 @@ from custom_exceptions import *
 
 
 class Store:
+    """ Represents a store. """
+
     def __init__(self):
+        """ Initializes empty containers to store Items and Orders. """
         self._inventory = {}
         self._orders = {}
 
     def check_inventory(self):
+        """ Prints whether an item is low in stock. """
         for key, item in self._inventory.items():
-            print(item.quantity)
+            if item.quantity >= 10:
+                print(f"{item.product_id} - {item.name} | IN STOCK")
+            elif 3 <= item.quantity < 10:
+                print(f"{item.product_id} - {item.name} | LOW")
+            elif 0 < item.quantity < 3:
+                print(f"{item.product_id} - {item.name} | VERY LOW")
+            elif item.quantity == 0:
+                print(f"{item.product_id} - {item.name} | OUT OF STOCK")
 
     def receive_order(self, order):
+        """
+        Creates a new Item if it doesn't exist. Subtracts the order item
+        quantity from the inventory item quantity. If inventory item
+        quantity is too low, adds to it increments of 100.
+        """
         target_item = self._inventory.get(order.product_id)
         order_quantity = order.product_details.get("quantity")
         if target_item is None:
@@ -24,19 +40,17 @@ class Store:
             try:
                 new_item = item_type_to_create(**item_properties)
                 self._inventory[new_item.product_id] = new_item
-            except OrderProcessError as e:
-                print(e)
-        else:
-            while target_item.quantity < order_quantity:
-                target_item.quantity += 100
-            target_item.quantity - order_quantity
+            except OrderProcessError:
+                print(f"Order {order.order_num} could not be processed.")
+            else:
+                target_item = new_item
+        while target_item.quantity < order_quantity:
+            target_item.quantity += 100
+        target_item.quantity - order_quantity
         self._orders[order.order_num] = order
 
-    def print_orders(self):
-        for order_num, order in self._orders.items():
-            print(order_num, order.item_name)
-
     def create_daily_transaction_report(self):
+        """ Creates a text file with all orders made. """
         current_time = datetime.datetime.now()
         file_name = current_time.strftime("DTR_%d%m%y_%H%M.txt")
         with open(file_name, mode='w', encoding="utf-8") as report:

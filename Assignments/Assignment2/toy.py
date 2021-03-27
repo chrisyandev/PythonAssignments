@@ -5,6 +5,7 @@ from custom_exceptions import *
 
 
 class Toy(Item, ABC):
+    """ Represents a toy item. """
 
     @abstractmethod
     def __init__(self, **kwargs):
@@ -17,8 +18,10 @@ class Toy(Item, ABC):
 
 
 class RobotBunny(Toy):
+    """ Represents an Easter toy. """
 
     class Colour(Enum):
+        """ Different colours the robot bunny can be. """
         ORANGE = "orange"
         BLUE = "blue"
         PINK = "pink"
@@ -38,8 +41,10 @@ class RobotBunny(Toy):
 
 
 class RCSpider(Toy):
+    """ Represents a Halloween toy. """
 
     class SpiderType(Enum):
+        """ Different the spider types the toy can be. """
         TARANTULA = "tarantula"
         WOLF_SPIDER = "wolf spider"
 
@@ -60,6 +65,8 @@ class RCSpider(Toy):
 
 
 class SantasWorkshop(Toy):
+    """ Represents a Christmas toy. """
+
     def __init__(self, **kwargs):
         """
         :param kwargs: product_id, name, desc, quantity, min_age, dimensions, num_rooms

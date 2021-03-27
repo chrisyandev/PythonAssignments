@@ -5,6 +5,7 @@ from custom_exceptions import *
 
 
 class Candy(Item, ABC):
+    """ Represents a candy item. """
 
     @abstractmethod
     def __init__(self, **kwargs):
@@ -17,6 +18,7 @@ class Candy(Item, ABC):
 
 
 class CremeEggs(Candy):
+    """ Represents an easter candy. """
 
     def __init__(self, **kwargs):
         """
@@ -29,8 +31,10 @@ class CremeEggs(Candy):
 
 
 class PumpkinCaramelToffee(Candy):
+    """ Represents a halloween candy. """
 
     class Variety(Enum):
+        """ Contains the candy varieties. """
         SEA_SALT = "sea salt"
         REGULAR = "regular"
 
@@ -49,8 +53,10 @@ class PumpkinCaramelToffee(Candy):
 
 
 class CandyCanes(Candy):
+    """ Represents a Christmas candy. """
 
     class Colour(Enum):
+        """ Contains the candy colours. """
         RED = "red"
         GREEN = "green"
 

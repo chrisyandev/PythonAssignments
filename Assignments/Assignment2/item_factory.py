@@ -5,69 +5,87 @@ from toy import *
 
 
 class ItemFactory(ABC):
+    """ Creates a group of Items for a specific holiday. """
 
     @abstractmethod
     def create_toy(self, **kwargs):
+        """ Creates a Toy. """
         pass
 
     @abstractmethod
     def create_candy(self, **kwargs):
+        """ Creates a Candy. """
         pass
 
     @abstractmethod
     def create_stuffed_animal(self, **kwargs):
+        """ Creates a StuffedAnimal. """
         pass
 
 
-class EasterItemFactory(ABC):
+class EasterItemFactory(ItemFactory):
+    """ Creates a group of Items for Easter. """
 
-    def create_toy(self, **kwargs):
-        print("Creating Robot Bunny")
+    @staticmethod
+    def create_toy(**kwargs):
+        """ Creates a RobotBunny. """
         return RobotBunny(**kwargs)
 
-    def create_candy(self, **kwargs):
-        print("Creating Creme Eggs")
+    @staticmethod
+    def create_candy(**kwargs):
+        """ Creates a CremeEggs. """
         return CremeEggs(**kwargs)
 
-    def create_stuffed_animal(self, **kwargs):
-        print("Creating Easter Bunny")
+    @staticmethod
+    def create_stuffed_animal(**kwargs):
+        """ Creates an EasterBunny. """
         return EasterBunny(**kwargs)
 
 
-class HalloweenItemFactory(ABC):
+class HalloweenItemFactory(ItemFactory):
+    """ Creates a group of Items for Halloween. """
 
-    def create_toy(self, **kwargs):
-        print("Creating RC Spider")
+    @staticmethod
+    def create_toy(**kwargs):
+        """ Creates an RCSpider. """
         return RCSpider(**kwargs)
 
-    def create_candy(self, **kwargs):
-        print("Creating Pumpkin Caramel Toffee")
+    @staticmethod
+    def create_candy(**kwargs):
+        """ Creates a PumpkinCaramelToffee. """
         return PumpkinCaramelToffee(**kwargs)
 
-    def create_stuffed_animal(self, **kwargs):
-        print("Creating Dancing Skeleton")
+    @staticmethod
+    def create_stuffed_animal(**kwargs):
+        """ Creates a Dancing Skeleton. """
         return DancingSkeleton(**kwargs)
 
 
-class ChristmasItemFactory(ABC):
+class ChristmasItemFactory(ItemFactory):
+    """ Creates a group of Items for Christmas. """
 
-    def create_toy(self, **kwargs):
-        print("Creating Santa's Workshop")
+    @staticmethod
+    def create_toy(**kwargs):
+        """ Creates a SantasWorkshop. """
         return SantasWorkshop(**kwargs)
 
-    def create_candy(self, **kwargs):
-        print("Creating Candy Canes")
+    @staticmethod
+    def create_candy(**kwargs):
+        """ Creates a CandyCanes. """
         return CandyCanes(**kwargs)
 
-    def create_stuffed_animal(self, **kwargs):
-        print("Creating Reindeer")
+    @staticmethod
+    def create_stuffed_animal(**kwargs):
+        """ Creates a Reindeer. """
         return Reindeer(**kwargs)
 
 
 class ItemFactoryMapper:
+    """ Maps strings to their respective factory or factory method name. """
 
     @classmethod
     def get_factory(cls, holiday):
+        """ Maps a string to a factory. """
         item_factory_types = {
             "easter": EasterItemFactory,
             "halloween": HalloweenItemFactory,
@@ -77,6 +95,7 @@ class ItemFactoryMapper:
 
     @staticmethod
     def get_method(factory, item_type):
+        """ Maps a string to a factory's method. """
         item_types = {
             "toy": factory.create_toy,
             "candy": factory.create_candy,

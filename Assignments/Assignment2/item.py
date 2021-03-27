@@ -2,6 +2,7 @@ from abc import *
 
 
 class Item(ABC):
+    """ Represents an item in a Store. """
 
     @abstractmethod
     def __init__(self, **kwargs):
@@ -15,8 +16,15 @@ class Item(ABC):
 
     @property
     def product_id(self):
+        """ Gets the product id. """
         return self._product_id
 
     @property
+    def name(self):
+        """ Gets the item name. """
+        return self._name
+
+    @property
     def quantity(self):
+        """ Gets the quantity. """
         return self._quantity

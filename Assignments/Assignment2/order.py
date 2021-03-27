@@ -5,7 +5,16 @@ import pandas as pd
 
 
 class Order:
+    """ Represents an order received at a Store. """
     def __init__(self, order_num, product_id, item_type, item_name, product_details, factory):
+        """
+        :param order_num: int
+        :param product_id: str
+        :param item_type: str
+        :param item_name: str
+        :param product_details: dict
+        :param factory: ItemFactory
+        """
         self._order_num = order_num
         self._product_id = product_id
         self._item_type = item_type
@@ -15,29 +24,36 @@ class Order:
 
     @property
     def order_num(self):
+        """ Gets the order number. """
         return self._order_num
 
     @property
     def product_id(self):
+        """ Gets the product id. """
         return self._product_id
 
     @property
     def product_details(self):
+        """ Gets the product details. """
         return self._product_details
 
     @property
     def item_type(self):
+        """ Gets the item type. """
         return self._item_type
 
     @property
     def item_name(self):
+        """ Gets the item name. """
         return self._item_name
 
     @property
     def factory(self):
+        """ Gets the item's factory. """
         return self._factory
 
     def __str__(self):
+        """ Creates a formatted string. """
         strings = (
             "Order " + str(self._order_num),
             "Item " + self._item_type.title(),
@@ -49,9 +65,11 @@ class Order:
 
 
 class OrderProcessor:
+    """ Responsible for reading and processing an Excel spreadsheet. """
 
     @staticmethod
     def process(store):
+        """ Reads an Excel spreadsheet and creates Orders from it. """
         file_name = input("Excel file name: ")
         my_file = Path(file_name)
         if not my_file.is_file():
