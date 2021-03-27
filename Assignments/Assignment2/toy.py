@@ -30,7 +30,7 @@ class RobotBunny(Toy):
         """
         :param kwargs: product_id, name, desc, quantity, min_age, num_sound, colour
         """
-        self._num_sfx = kwargs.pop("num_sound")
+        self._num_sound = kwargs.pop("num_sound")
         try:
             string = kwargs.pop("colour").lower()
             self._colour = self.Colour(string)
