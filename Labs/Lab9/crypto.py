@@ -91,23 +91,34 @@ def setup_request_commandline() -> Request:
 
 
 class Crypto:
+    """ Used for encryption or decryption. """
 
     def __init__(self):
+        """ Sets the next handler for each handler. """
+        check_key_handler = CheckKeyHandler()
         validate_data_handler = ValidateDataHandler()
+        prepare_data_handler = PrepareDataHandler()
         encrypt_data_handler = EncryptDataHandler()
         output_result_handler = OutputResultHandler()
-        validate_data_handler.set_handler(encrypt_data_handler)
+        check_key_handler.set_handler(validate_data_handler)
+        validate_data_handler.set_handler(prepare_data_handler)
+        prepare_data_handler.set_handler(encrypt_data_handler)
         encrypt_data_handler.set_handler(output_result_handler)
-        self.encryption_start_handler = validate_data_handler
+        self.encryption_start_handler = check_key_handler
 
+        check_key_handler = CheckKeyHandler()
         validate_data_handler = ValidateDataHandler()
+        prepare_data_handler = PrepareDataHandler()
         decrypt_data_handler = DecryptDataHandler()
         output_result_handler = OutputResultHandler()
-        validate_data_handler.set_handler(decrypt_data_handler)
+        check_key_handler.set_handler(validate_data_handler)
+        validate_data_handler.set_handler(prepare_data_handler)
+        prepare_data_handler.set_handler(decrypt_data_handler)
         decrypt_data_handler.set_handler(output_result_handler)
-        self.decryption_start_handler = validate_data_handler
+        self.decryption_start_handler = check_key_handler
 
     def execute_request(self, request: Request):
+        """ Executes encryption or decryption. """
         if request.encryption_state is CryptoMode.EN:
             self.encryption_start_handler.handle_request(request)
         elif request.encryption_state is CryptoMode.DE:
@@ -115,6 +126,7 @@ class Crypto:
 
 
 def main(request: Request):
+    """ Drives the program. """
     crypto = Crypto()
     crypto.execute_request(request)
 

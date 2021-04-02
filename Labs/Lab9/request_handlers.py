@@ -6,28 +6,42 @@ import ast
 
 
 class BaseRequestHandler(ABC):
-
+    """ All handlers must inherit from this. """
     def __init__(self, next_handler=None):
+        """
+        :param next_handler: a BaseRequestHandler
+        """
         self.next_handler = next_handler
 
     @abstractmethod
     def handle_request(self, request, **kwargs):
+        """ Handles a specific task. """
         pass
 
     def set_handler(self, handler):
+        """ Sets the next handler. """
         self.next_handler = handler
+
+
+class CheckKeyHandler(BaseRequestHandler):
+    """ Checks if key is of valid length. """
+    def handle_request(self, request, **kwargs):
+        """ If key is length 8, 16, or 24, converts to bytes. """
+        print("checking key")
+        key_length = (8, 16, 24)
+        if len(request.key) not in key_length:
+            print("Key length must be 8, 16, or 24")
+        else:
+            kwargs["key"] = bytes(request.key, 'utf-8')
+            self.next_handler.handle_request(request, **kwargs)
 
 
 class ValidateDataHandler(BaseRequestHandler):
     """ Checks if data can be processed. """
-
     def handle_request(self, request, **kwargs):
         """
         If file exists and is a text file, this can be processed.
         Or if data input isn't an empty string, this can be processed.
-        :param request: a Request
-        :param kwargs: empty
-        :return: None
         """
         print("validating input")
 
@@ -57,52 +71,54 @@ class ValidateDataHandler(BaseRequestHandler):
 
 class PrepareDataHandler(BaseRequestHandler):
     """ Prepares the data in order to be processed. """
-
     def handle_request(self, request, **kwargs):
         """ Converts string from file or Request into bytes. """
         print("preparing data")
-        if request.data_input is not None:
-            pass
-
+        if request.encryption_state.value == CryptoMode.EN.value:
+            if request.data_input is not None:
+                kwargs["data"] = bytes(request.data_input, 'utf-8')
+            else:
+                with open(request.input_file, mode="rb") as text_file:
+                    kwargs["data"] = text_file.read()
+        if request.encryption_state.value == CryptoMode.DE.value:
+            if request.data_input is not None:
+                data = r"%s" % request.data_input
+                kwargs["data"] = ast.literal_eval(data)
+            else:
+                with open(request.input_file, mode="r") as text_file:
+                    data = r"%s" % text_file.read()
+                    kwargs["data"] = ast.literal_eval(data)
+        self.next_handler.handle_request(request, **kwargs)
 
 
 class EncryptDataHandler(BaseRequestHandler):
+    """ Encrypts the data. """
     def handle_request(self, request, **kwargs):
+        """ Encrypts the data. """
         print("encrypting data")
-        key = DesKey(bytes(request.key, 'utf-8'))
-        if request.data_input is not None:
-            encrypted = key.encrypt(bytes(request.data_input, 'utf-8'), padding=True)
-            print(request.data_input)
-            print(encrypted)
-        else:
-            with open(request.input_file, mode="rb") as text_file:
-                data = text_file.read()
-                encrypted = key.encrypt(data, padding=True)
-                print(data)
-                print(encrypted)
-        self.next_handler.handle_request(request)
+        key = DesKey(kwargs.pop("key"))
+        kwargs["result"] = key.encrypt(kwargs.pop("data"), padding=True)
+        self.next_handler.handle_request(request, **kwargs)
 
 
 class DecryptDataHandler(BaseRequestHandler):
+    """ Decrypts the data. """
     def handle_request(self, request, **kwargs):
+        """ Decrypts the data. """
         print("decrypting data")
-        key = DesKey(bytes(request.key, 'utf-8'))
-        if request.data_input is not None:
-            data = r"%s" % request.data_input
-            data = ast.literal_eval(data)
-            print(data)
-            decrypted = key.decrypt(data, padding=True)
-            print(decrypted)
-        else:
-            with open(request.input_file, mode="r") as text_file:
-                data = r"%s" % text_file.read()
-                data = ast.literal_eval(data)
-                print(data)
-                decrypted = key.decrypt(data, padding=True)
-                print(decrypted)
-        self.next_handler.handle_request(request)
+        key = DesKey(kwargs.pop("key"))
+        kwargs["result"] = key.decrypt(kwargs.pop("data"), padding=True)
+        self.next_handler.handle_request(request, **kwargs)
 
 
 class OutputResultHandler(BaseRequestHandler):
+    """ Outputs the result. """
     def handle_request(self, request, **kwargs):
+        """ Either prints the result or writes it to a file. """
         print("outputting result")
+        result = kwargs.pop("result")
+        if request.output == "print":
+            print(result)
+        else:
+            with open(request.output, mode="w") as text_file:
+                text_file.write(str(result))
