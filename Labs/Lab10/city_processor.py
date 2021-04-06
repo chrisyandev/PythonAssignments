@@ -148,7 +148,9 @@ class ISSDataRequest:
         response = requests.get(cls.OPEN_NOTIFY_OVERHEAD_PASS_URL, params=parameters)
 
         # DEBUG:
-        print(response.json())
-        # jprint(data)
+        print(response)
+        jprint(response.json()['response'])
+
+        return CityOverheadTimes(city, *response.json()['response'])
 
 
