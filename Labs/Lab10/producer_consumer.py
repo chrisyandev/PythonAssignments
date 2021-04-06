@@ -26,7 +26,7 @@ class ProducerThread(Thread):
         self.overhead_time_queue = queue
 
     def run(self) -> None:
-        print("running")
+        print("producer running")
         count = 1
         for city in self.city_list:
             print(city)
@@ -34,7 +34,24 @@ class ProducerThread(Thread):
             self.overhead_time_queue.put(overhead_times)
             count += 1
             if count % 5 == 0:
-                print("sleeping")
+                print("producer sleeping for 1")
                 time.sleep(1)
 
 
+class ConsumerThread(Thread):
+    def __init__(self, queue: CityOverheadTimeQueue):
+        super().__init__()
+        self.overhead_time_queue = queue
+        self.data_incoming = True
+
+    def run(self) -> None:
+        print("consumer running")
+        if len(self.overhead_time_queue) == 0:
+            print("consumer sleeping for 0.75")
+            time.sleep(0.75)
+        while self.data_incoming or len(self.overhead_time_queue) > 0:
+            city_overhead_times = self.overhead_time_queue.get()
+            for event in city_overhead_times.passes:
+                print(event)
+                print("consumer sleeping for 0.5")
+                time.sleep(0.5)
