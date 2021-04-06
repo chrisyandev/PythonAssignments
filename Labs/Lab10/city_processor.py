@@ -149,8 +149,7 @@ class ISSDataRequest:
 
         # DEBUG:
         print(response)
-        jprint(response.json()['response'])
-
+        # jprint(response.json()['response'])
         return CityOverheadTimes(city, *response.json()['response'])
 
 
