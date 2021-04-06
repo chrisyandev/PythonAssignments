@@ -140,10 +140,15 @@ class ISSDataRequest:
 
     @classmethod
     def get_overhead_pass(cls, city: City) -> CityOverheadTimes:
-        pass
         # Write request code here!
+        parameters = {
+            "lat": city.lat,
+            "lon": city.lng
+        }
+        response = requests.get(cls.OPEN_NOTIFY_OVERHEAD_PASS_URL, params=parameters)
+
         # DEBUG:
-        # print(response)
+        print(response.json())
         # jprint(data)
 
 
