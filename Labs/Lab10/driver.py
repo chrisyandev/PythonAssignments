@@ -3,10 +3,12 @@ import math
 
 
 def main():
-    format = "%(asctime)s: %(message)s"
-    logging.basicConfig(format=format, level=logging.INFO)
+    """ Creates and starts producer and consumer threads. """
+    fmt = "%(asctime)s: %(message)s"
+    logging.basicConfig(format=fmt, level=logging.INFO)
+    start_time = datetime.datetime.now()
 
-    city_database = CityDatabase("city_locations.xlsx")
+    city_database = CityDatabase("city_locations_test.xlsx")
     city_overhead_time_queue = CityOverheadTimeQueue()
 
     sub_database_size = math.floor((len(city_database.city_db) / 3))
@@ -31,6 +33,9 @@ def main():
     consumer.data_incoming = False
     consumer.start()
     consumer.join()
+
+    end_time = datetime.datetime.now()
+    print(f"Total duration {(end_time - start_time).total_seconds()} seconds")
 
 
 if __name__ == "__main__":

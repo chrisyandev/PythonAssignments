@@ -140,6 +140,11 @@ class ISSDataRequest:
 
     @classmethod
     def get_overhead_pass(cls, city: City) -> CityOverheadTimes:
+        """
+        See class docstring.
+        :param city: a City
+        :return: a CityOverheadTimes
+        """
         parameters = {
             "lat": city.lat,
             "lon": city.lng
