@@ -1,24 +1,33 @@
 from city_processor import *
 from producer_consumer import *
+import math
 
 
 def main():
     city_database = CityDatabase("city_locations_test.xlsx")
-    # print(city_database.city_db[0])
-    # city_overhead_times = ISSDataRequest.get_overhead_pass(city_database.city_db[0])
     city_overhead_time_queue = CityOverheadTimeQueue()
-    # city_overhead_time_queue.put(city_overhead_times)
-    # print(len(city_overhead_time_queue))
 
-    producer = ProducerThread(city_database.city_db, city_overhead_time_queue)
-    producer.start()
-    producer.join()
+    sub_database_size = math.floor((len(city_database.city_db) / 3))
+    sub_database_1 = [city_database.city_db[x]
+                      for x in range(sub_database_size)]
+    sub_database_2 = [city_database.city_db[x]
+                      for x in range(sub_database_size, sub_database_size * 2)]
+    sub_database_3 = [city_database.city_db[x]
+                      for x in range(sub_database_size * 2, len(city_database.city_db))]
+
+    producers = [
+        ProducerThread(sub_database_1, city_overhead_time_queue),
+        ProducerThread(sub_database_2, city_overhead_time_queue),
+        ProducerThread(sub_database_3, city_overhead_time_queue)
+    ]
+    for p in producers:
+        p.start()
+        p.join()
 
     consumer = ConsumerThread(city_overhead_time_queue)
+    consumer.data_incoming = False
     consumer.start()
     consumer.join()
-    print("setting data_incoming to False")
-    consumer.data_incoming = False
 
 
 if __name__ == "__main__":
