@@ -144,6 +144,7 @@ class ISSDataRequest:
             "lat": city.lat,
             "lon": city.lng
         }
+        print(f"ISSDataRequest for {city.city_name} with params: {json.dumps(parameters)}")
         response = requests.get(cls.OPEN_NOTIFY_OVERHEAD_PASS_URL, params=parameters)
 
         # DEBUG:

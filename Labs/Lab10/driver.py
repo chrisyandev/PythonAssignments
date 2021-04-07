@@ -1,10 +1,12 @@
-from city_processor import *
 from producer_consumer import *
 import math
 
 
 def main():
-    city_database = CityDatabase("city_locations_test.xlsx")
+    format = "%(asctime)s: %(message)s"
+    logging.basicConfig(format=format, level=logging.INFO)
+
+    city_database = CityDatabase("city_locations.xlsx")
     city_overhead_time_queue = CityOverheadTimeQueue()
 
     sub_database_size = math.floor((len(city_database.city_db) / 3))
@@ -22,6 +24,7 @@ def main():
     ]
     for p in producers:
         p.start()
+    for p in producers:
         p.join()
 
     consumer = ConsumerThread(city_overhead_time_queue)
