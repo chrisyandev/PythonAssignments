@@ -81,6 +81,7 @@ class ConsumerThread(Thread):
             print(f"Consumer {self.id} is sleeping since queue is empty")
             time.sleep(0.75)
         while self.data_incoming or len(self.overhead_time_queue) > 0:
+            logging.info("Consumer %d is consuming from the queue", self.id)
             city_overhead_times = self.overhead_time_queue.get()
             print(f"The ISS will pass over {city_overhead_times.city.city_name} "
                   f"{len(city_overhead_times.passes)} times. The times are:")

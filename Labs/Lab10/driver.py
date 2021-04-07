@@ -8,7 +8,7 @@ def main():
     logging.basicConfig(format=fmt, level=logging.INFO)
     start_time = datetime.datetime.now()
 
-    city_database = CityDatabase("city_locations_test.xlsx")
+    city_database = CityDatabase("city_locations.xlsx")
     city_overhead_time_queue = CityOverheadTimeQueue()
 
     sub_database_size = math.floor((len(city_database.city_db) / 3))
@@ -24,14 +24,13 @@ def main():
         ProducerThread(sub_database_2, city_overhead_time_queue),
         ProducerThread(sub_database_3, city_overhead_time_queue)
     ]
+    consumer = ConsumerThread(city_overhead_time_queue)
+    consumer.start()
     for p in producers:
         p.start()
     for p in producers:
         p.join()
-
-    consumer = ConsumerThread(city_overhead_time_queue)
     consumer.data_incoming = False
-    consumer.start()
     consumer.join()
 
     end_time = datetime.datetime.now()
