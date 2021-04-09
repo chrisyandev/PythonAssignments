@@ -106,4 +106,3 @@ class OrderProcessor:
             new_order = Order(df["order_number"][x], df["product_id"][x],
                               df["item"][x], df["name"][x], product_details, factory)
             store.receive_order(new_order)
-
