@@ -1,4 +1,6 @@
-import argparse
+from abc import *
+from pathlib import Path
+from .poke_retriever import *
 
 
 class Request:
@@ -15,45 +17,80 @@ class Request:
                f"Output: {self.output}"
 
 
-def setup_request_commandline() -> Request:
-    """
-    Implements the argparse module to accept arguments via the command
-    line. This function specifies what these arguments are and parses it
-    into an object of type Request. If something goes wrong with
-    provided arguments then the function prints an error message and
-    exits the application.
-    :return: The object of type Request with all the arguments provided
-    in it.
-    """
-    parser = argparse.ArgumentParser()
-    parser.add_argument("mode", choices=("pokemon", "ability", "move"), help="The mode the app will open in")
-    input_group = parser.add_mutually_exclusive_group()
-    input_group.add_argument("--inputfile", help="Name of file containing the data")
-    input_group.add_argument("--inputdata", help="Data input directly into the console")
-    parser.add_argument("--expanded", action="store_true", help="Outputs additional information")
-    parser.add_argument("--output", default="console", help="Prints the output to this file")
+class BaseRequestHandler(ABC):
+    """ All handlers must inherit from this. """
+    def __init__(self, next_handler=None):
+        """
+        :param next_handler: a BaseRequestHandler
+        """
+        self.next_handler = next_handler
 
-    try:
-        args = parser.parse_args()
-        request = Request()
-        print(vars(args))
-        request.mode = args.mode
-        request.input_file = args.inputfile
-        request.input_data = args.inputdata
-        request.expanded = args.expanded
-        request.output = args.output
-        print(request)
-        return request
-    except Exception as e:
-        print(f"Error! Could not read arguments.\n{e}")
-        quit()
+    @abstractmethod
+    def handle_request(self, request: Request, **kwargs):
+        """ Handles a specific task. """
+        pass
+
+    def set_handler(self, handler):
+        """ Sets the next handler. """
+        self.next_handler = handler
 
 
-def main(request: Request):
-    """ Drives the program. """
+class ValidateDataHandler(BaseRequestHandler):
+    """ Checks if data can be processed. """
+    def handle_request(self, request: Request, **kwargs):
+        """
+        If file exists and is a text file, this can be processed.
+        Or if data input isn't an empty string, this can be processed.
+        """
+        print("validating input")
+
+        is_valid_request = False
+
+        if request.input_file is not None:
+            my_file = Path(request.input_file)
+            if not my_file.is_file():
+                print("File does not exist")
+            elif not request.input_file.endswith(".txt"):
+                print("Must be a text file")
+            else:
+                is_valid_request = True
+
+        if request.input_data is not None:
+            if request.input_data.strip() == "":
+                print("String is empty")
+            else:
+                is_valid_request = True
+
+        if is_valid_request:
+            self.next_handler.handle_request(request, **kwargs)
+        else:
+            print("Cannot process data")
+            return
+
+
+class PrepareDataHandler(BaseRequestHandler):
+    """ Prepares the data in order to be processed. """
+    def handle_request(self, request: Request, **kwargs):
+        """ Converts string from file or Request into bytes. """
+        print("preparing data")
+        if request.input_data is not None:
+            kwargs["ids"] = [request.input_data]
+        else:
+            with open(request.input_file, mode='r', encoding='utf-8') as text_file:
+                ids = text_file.readlines()
+                ids = [w.rstrip("\n") for w in ids]
+                kwargs["ids"] = ids
+        self.next_handler.handle_request(request, **kwargs)
+
+
+class RequestDataHandler(BaseRequestHandler):
+    def handle_request(self, request: Request, **kwargs):
+        print("requesting data")
+        poke_retriever = PokeRetriever()
+        kwargs["response"] = poke_retriever.retrieve(kwargs.get("ids"))
+        print(kwargs["response"][0]["abilities"])
+
+
+class OutputPokedexObjectHandler(BaseRequestHandler):
     pass
 
-
-if __name__ == '__main__':
-    request = setup_request_commandline()
-    main(request)

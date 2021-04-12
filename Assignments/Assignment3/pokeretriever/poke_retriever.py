@@ -2,10 +2,15 @@ import asyncio
 import aiohttp
 
 
-class HttpRequest:
+class PokeRetriever:
 
-    @classmethod
-    async def get_pokedex_data(cls, id_, url: str, session: aiohttp.ClientSession,) -> dict:
+    def retrieve(self, ids: list):
+        loop = asyncio.get_event_loop()
+        response = loop.run_until_complete(self.process_requests(ids))
+        return response
+
+    @staticmethod
+    async def get_pokedex_data(id_, url: str, session: aiohttp.ClientSession,) -> dict:
         """
         :param id_: an int or str
         :param url: a string, the unformatted url (missing parameters)
@@ -21,7 +26,7 @@ class HttpRequest:
         return json_dict
 
     @classmethod
-    async def process_requests(cls, requests: list) -> list:
+    async def process_requests(cls, requests: list) -> tuple:
         """
         This function depicts the use of asyncio.gather to run multiple
         async coroutines concurrently.
