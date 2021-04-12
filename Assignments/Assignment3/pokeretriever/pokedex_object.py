@@ -8,14 +8,33 @@ class PokedexObject(ABC):
 
 
 class Pokemon(PokedexObject):
+
+    class PokemonStat:
+        def __init__(self):
+            pass
+
+    class PokemonAbility:
+        def __init__(self):
+            pass
+
+    class PokemonMove:
+        def __init__(self):
+            pass
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.height = kwargs.get("height")
         self.weight = kwargs.get("weight")
-        self.stats = kwargs.get("stats")
+        self.stats = []
+        json_stats = kwargs.get("stats")
+        # for stat_dict in json_stats:
+        #     self.stats.append(Stat(stat_dict))
+
         self.types = kwargs.get("types")
         self.abilities = kwargs.get("abilities")
         self.moves = kwargs.get("moves")
+
+        self.expanded = kwargs.get("expanded")
 
 
 class Ability(PokedexObject):

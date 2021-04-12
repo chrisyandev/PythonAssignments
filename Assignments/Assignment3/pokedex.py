@@ -41,9 +41,11 @@ def setup_request_commandline() -> Request:
 def execute_request(request: Request) -> PokedexObject:
     validate_data_handler = ValidateDataHandler()
     prepare_data_handler = PrepareDataHandler()
-    request_data_handler = RequestDataHandler()
+    get_response_handler = GetResponseHandler()
+    pokedex_object_handler = PokedexObjectHandler()
     validate_data_handler.set_handler(prepare_data_handler)
-    prepare_data_handler.set_handler(request_data_handler)
+    prepare_data_handler.set_handler(get_response_handler)
+    get_response_handler.set_handler(pokedex_object_handler)
 
     starting_handler = validate_data_handler
     starting_handler.handle_request(request)

@@ -1,6 +1,7 @@
 from abc import *
 from pathlib import Path
 from .poke_retriever import *
+from .pokedex_object_factory import *
 
 
 class Request:
@@ -83,12 +84,28 @@ class PrepareDataHandler(BaseRequestHandler):
         self.next_handler.handle_request(request, **kwargs)
 
 
-class RequestDataHandler(BaseRequestHandler):
+class GetResponseHandler(BaseRequestHandler):
     def handle_request(self, request: Request, **kwargs):
-        print("requesting data")
+        print("getting response")
         poke_retriever = PokeRetriever()
         kwargs["response"] = poke_retriever.retrieve(kwargs.get("ids"))
-        print(kwargs["response"][0]["abilities"])
+        print(kwargs["response"][2]["abilities"])
+        self.next_handler.handle_request(request, **kwargs)
+
+
+class PokedexObjectHandler(BaseRequestHandler):
+    def handle_request(self, request: Request, **kwargs):
+        print("getting pokedex objects")
+        poke_objects = []
+        factory = FactoryTypes.factory_types[request.mode]()
+        for x in kwargs.get("response"):
+            poke_objects.append(factory.create_object(x, request))
+
+        print(poke_objects[0].id)
+        print(poke_objects[0].name)
+        print(poke_objects[0].height)
+        print(poke_objects[0].weight)
+        print(poke_objects[0].expanded)
 
 
 class OutputPokedexObjectHandler(BaseRequestHandler):
