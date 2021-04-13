@@ -63,7 +63,7 @@ class ValidateDataHandler(BaseRequestHandler):
                 is_valid_request = True
 
         if is_valid_request:
-            self.next_handler.handle_request(request, **kwargs)
+            return self.next_handler.handle_request(request, **kwargs)
         else:
             print("Cannot process data")
             return
@@ -81,7 +81,7 @@ class PrepareDataHandler(BaseRequestHandler):
                 ids = text_file.readlines()
                 ids = [w.rstrip("\n") for w in ids]
                 kwargs["ids"] = ids
-        self.next_handler.handle_request(request, **kwargs)
+        return self.next_handler.handle_request(request, **kwargs)
 
 
 class GetResponseHandler(BaseRequestHandler):
@@ -89,7 +89,7 @@ class GetResponseHandler(BaseRequestHandler):
         print("getting response")
         kwargs["response"] = PokeRetriever.retrieve(request.mode, kwargs.get("ids"))
         print(kwargs["response"][2]["abilities"])
-        self.next_handler.handle_request(request, **kwargs)
+        return self.next_handler.handle_request(request, **kwargs)
 
 
 class PokedexObjectHandler(BaseRequestHandler):
@@ -99,12 +99,13 @@ class PokedexObjectHandler(BaseRequestHandler):
         factory = FactoryTypes.factory_types[request.mode]()
         for x in kwargs.get("response"):
             poke_objects.append(factory.create_object(x, request))
+        return poke_objects
 
-        print(poke_objects[0].id)
-        print(poke_objects[0].name)
-        print(poke_objects[0].height)
-        print(poke_objects[0].weight)
-        print(poke_objects[0].expanded)
+        # print(poke_objects[0].id)
+        # print(poke_objects[0].name)
+        # print(poke_objects[0].height)
+        # print(poke_objects[0].weight)
+        # print(poke_objects[0].expanded)
 
 
 class OutputPokedexObjectHandler(BaseRequestHandler):

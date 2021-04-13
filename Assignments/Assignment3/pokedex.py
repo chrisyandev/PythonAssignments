@@ -1,4 +1,5 @@
 import argparse
+import datetime
 
 from pokeretriever.request import *
 from pokeretriever.pokedex_object import *
@@ -38,7 +39,7 @@ def setup_request_commandline() -> Request:
         quit()
 
 
-def execute_request(request: Request) -> PokedexObject:
+def execute_request(request: Request) -> list:
     validate_data_handler = ValidateDataHandler()
     prepare_data_handler = PrepareDataHandler()
     get_response_handler = GetResponseHandler()
@@ -48,12 +49,17 @@ def execute_request(request: Request) -> PokedexObject:
     get_response_handler.set_handler(pokedex_object_handler)
 
     starting_handler = validate_data_handler
-    starting_handler.handle_request(request)
+    result = starting_handler.handle_request(request)
+    return result
 
 
 def main(request: Request):
     """ Drives the program. """
-    execute_request(request)
+    poke_objs = execute_request(request)
+    print("Timestamp: " + str(datetime.datetime.now()))
+    print("Number of requests: " + str(len(poke_objs)))
+    for po in poke_objs:
+        print(po)
 
 
 if __name__ == '__main__':

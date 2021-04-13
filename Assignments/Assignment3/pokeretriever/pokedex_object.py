@@ -21,7 +21,7 @@ class Pokemon(PokedexObject):
             self.details = Stat(**response[0])
 
         def __str__(self):
-            return f"PokemonStat -> name: {self.name}, base_value: {self.base_value}, details: {self.details}"
+            return f"{self.name}: {self.base_value}"
 
 
     class PokemonAbility:
@@ -44,14 +44,27 @@ class Pokemon(PokedexObject):
                 pokemon_stat.set_details()
             self.stats.append(pokemon_stat)
 
-        self.types = kwargs.get("types")
+        self.types = [t["type"]["name"] for t in kwargs["types"]]
         self.abilities = kwargs.get("abilities")
         self.moves = kwargs.get("moves")
 
         self.expanded = kwargs.get("expanded")
 
-        for s in self.stats:
-            print(s)
+    def __str__(self):
+        output = f"Name: {self.name}\n" \
+                 f"ID: {self.id}\n" \
+                 f"Height: {self.height} decimetres\n" \
+                 f"Weight: {self.weight} hectograms\n" \
+                 f"Types: {', '.join(self.types)}\n" \
+                 f"\nStats:\n------\n"
+        if self.expanded:
+            for s in self.stats:
+                output += str(s.details)
+                output += f"Base_Value: {s.base_value}\n\n"
+        else:
+            for s in self.stats:
+                output += str(s) + "\n"
+        return output
 
 
 class Ability(PokedexObject):
@@ -71,7 +84,9 @@ class Stat(PokedexObject):
         self.is_battle_only = kwargs["is_battle_only"]
 
     def __str__(self):
-        return f"Stat -> name: {self.name}, id: {self.id}, is_battle_only: {self.is_battle_only}"
+        return f"Name: {self.name}\n" \
+               f"ID: {self.id}\n" \
+               f"Is_Battle_Only: {self.is_battle_only}\n"
 
 
 class Move(PokedexObject):
