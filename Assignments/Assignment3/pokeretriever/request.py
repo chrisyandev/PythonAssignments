@@ -87,8 +87,7 @@ class PrepareDataHandler(BaseRequestHandler):
 class GetResponseHandler(BaseRequestHandler):
     def handle_request(self, request: Request, **kwargs):
         print("getting response")
-        poke_retriever = PokeRetriever()
-        kwargs["response"] = poke_retriever.retrieve(kwargs.get("ids"))
+        kwargs["response"] = PokeRetriever.retrieve(request.mode, kwargs.get("ids"))
         print(kwargs["response"][2]["abilities"])
         self.next_handler.handle_request(request, **kwargs)
 

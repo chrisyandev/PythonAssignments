@@ -4,9 +4,10 @@ import aiohttp
 
 class PokeRetriever:
 
-    def retrieve(self, ids: list):
+    @classmethod
+    def retrieve(cls, mode, ids: list):
         loop = asyncio.get_event_loop()
-        response = loop.run_until_complete(self.process_requests(ids))
+        response = loop.run_until_complete(cls.process_requests(mode, ids))
         return response
 
     @staticmethod
@@ -26,18 +27,19 @@ class PokeRetriever:
         return json_dict
 
     @classmethod
-    async def process_requests(cls, requests: list) -> tuple:
+    async def process_requests(cls, mode: str, ids: list) -> tuple:
         """
         This function depicts the use of asyncio.gather to run multiple
         async coroutines concurrently.
-        :param requests: a list of int's
+        :param mode: a str
+        :param ids: a list of int or str
         :return: list of dict, collection of response data from the endpoint.
         """
-        url = "https://pokeapi.co/api/v2/pokemon/{}/"
+        url = "https://pokeapi.co/api/v2/%s/{}/" % mode
         async with aiohttp.ClientSession() as session:
             print("***process_requests")
             async_coroutines = [cls.get_pokedex_data(id_, url, session)
-                                for id_ in requests]
+                                for id_ in ids]
 
             responses = await asyncio.gather(*async_coroutines)
 

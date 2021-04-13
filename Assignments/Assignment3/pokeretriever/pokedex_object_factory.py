@@ -33,7 +33,7 @@ class StatFactory(PokedexObjectFactory):
         Creates a Stat object.
         :return: a Stat object
         """
-        pass
+        return Stat(**json_data)
 
 
 class MoveFactory(PokedexObjectFactory):

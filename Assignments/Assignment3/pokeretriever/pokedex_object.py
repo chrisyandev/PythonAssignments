@@ -1,4 +1,5 @@
 from abc import *
+from .poke_retriever import *
 
 
 class PokedexObject(ABC):
@@ -10,8 +11,18 @@ class PokedexObject(ABC):
 class Pokemon(PokedexObject):
 
     class PokemonStat:
-        def __init__(self):
-            pass
+        def __init__(self, **kwargs):
+            self.name = kwargs["stat"]["name"]
+            self.base_value = kwargs["base_stat"]
+            self.details = None
+
+        def set_details(self):
+            response = PokeRetriever.retrieve("stat", [self.name])
+            self.details = Stat(**response[0])
+
+        def __str__(self):
+            return f"PokemonStat -> name: {self.name}, base_value: {self.base_value}, details: {self.details}"
+
 
     class PokemonAbility:
         def __init__(self):
@@ -27,14 +38,20 @@ class Pokemon(PokedexObject):
         self.weight = kwargs.get("weight")
         self.stats = []
         json_stats = kwargs.get("stats")
-        # for stat_dict in json_stats:
-        #     self.stats.append(Stat(stat_dict))
+        for st in json_stats:
+            pokemon_stat = self.PokemonStat(**st)
+            if kwargs.get("expanded"):
+                pokemon_stat.set_details()
+            self.stats.append(pokemon_stat)
 
         self.types = kwargs.get("types")
         self.abilities = kwargs.get("abilities")
         self.moves = kwargs.get("moves")
 
         self.expanded = kwargs.get("expanded")
+
+        for s in self.stats:
+            print(s)
 
 
 class Ability(PokedexObject):
@@ -49,7 +66,12 @@ class Ability(PokedexObject):
 class Stat(PokedexObject):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.is_battle_only = kwargs.get("is_battle_only")
+        self.name = kwargs["name"]
+        self.id = kwargs["id"]
+        self.is_battle_only = kwargs["is_battle_only"]
+
+    def __str__(self):
+        return f"Stat -> name: {self.name}, id: {self.id}, is_battle_only: {self.is_battle_only}"
 
 
 class Move(PokedexObject):
