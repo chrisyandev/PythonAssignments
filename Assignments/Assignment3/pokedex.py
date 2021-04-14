@@ -59,7 +59,9 @@ def main(request: Request):
     print("Timestamp: " + str(datetime.datetime.now()))
     print("Number of requests: " + str(len(poke_objs)))
     for po in poke_objs:
+        print("==============================================")
         print(po)
+        print("==============================================")
 
 
 if __name__ == '__main__':

@@ -4,8 +4,8 @@ from .poke_retriever import *
 
 class PokedexObject(ABC):
     def __init__(self, **kwargs):
-        self.name = kwargs.get("name")
-        self.id = kwargs.get("id")
+        self.name = kwargs["name"]
+        self.id = kwargs["id"]
 
 
 class Pokemon(PokedexObject):
@@ -37,17 +37,26 @@ class Pokemon(PokedexObject):
 
     class PokemonMove:
         def __init__(self, **kwargs):
-            pass
+            self.name = kwargs["move"]["name"]
+            self.level_acquired = kwargs["version_group_details"][0]["level_learned_at"]
+            self.details = None
+
+        def set_details(self):
+            response = PokeRetriever.retrieve("move", [self.name])
+            self.details = Move(**response[0])
+
+        def __str__(self):
+            return f"Move name: {self.name}, Level acquired: {self.level_acquired}"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.expanded = kwargs.get("expanded")
-        self.height = kwargs.get("height")
-        self.weight = kwargs.get("weight")
+        self.expanded = kwargs["expanded"]
+        self.height = kwargs["height"]
+        self.weight = kwargs["weight"]
         self.types = [t["type"]["name"] for t in kwargs["types"]]
 
         self.stats = []
-        json_stats = kwargs.get("stats")
+        json_stats = kwargs["stats"]
         for st in json_stats:
             pokemon_stat = self.PokemonStat(**st)
             if self.expanded:
@@ -55,20 +64,20 @@ class Pokemon(PokedexObject):
             self.stats.append(pokemon_stat)
 
         self.abilities = []
-        json_abilities = kwargs.get("abilities")
+        json_abilities = kwargs["abilities"]
         for ab in json_abilities:
             pokemon_ability = self.PokemonAbility(**ab)
             if self.expanded:
                 pokemon_ability.set_details()
             self.abilities.append(pokemon_ability)
 
-        # self.moves = []
-        # json_moves = kwargs.get("moves")
-        # for mo in json_moves:
-        #     pokemon_move = self.PokemonMove(**mo)
-        #     if self.expanded:
-        #         pokemon_move.set_details()
-        #     self.moves.append(pokemon_move)
+        self.moves = []
+        json_moves = kwargs["moves"]
+        for mo in json_moves:
+            pokemon_move = self.PokemonMove(**mo)
+            if self.expanded:
+                pokemon_move.set_details()
+            self.moves.append(pokemon_move)
 
     def __str__(self):
         output = f"Name: {self.name}\n" \
@@ -76,6 +85,7 @@ class Pokemon(PokedexObject):
                  f"Height: {self.height} decimetres\n" \
                  f"Weight: {self.weight} hectograms\n" \
                  f"Types: {', '.join(self.types)}\n"
+
         if self.expanded:
             output += f"\nStats:\n------\n"
             for s in self.stats:
@@ -86,6 +96,10 @@ class Pokemon(PokedexObject):
             for a in self.abilities:
                 output += str(a.details) + "\n"
 
+            output += f"\nMoves:\n------\n"
+            for m in self.moves:
+                output += str(m.details) + "\n"
+
         else:
             output += f"\nStats:\n------\n"
             for s in self.stats:
@@ -94,6 +108,10 @@ class Pokemon(PokedexObject):
             output += f"\nAbilities:\n------\n"
             for a in self.abilities:
                 output += str(a) + "\n"
+
+            output += f"\nMoves:\n------\n"
+            for m in self.moves:
+                output += str(m) + "\n"
 
         return output
 
@@ -130,13 +148,24 @@ class Stat(PokedexObject):
 class Move(PokedexObject):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.generation = kwargs.get("generation")
-        self.accuracy = kwargs.get("accuracy")
-        self.pp = kwargs.get("pp")
-        self.power = kwargs.get("power")
-        self.type = kwargs.get("type")
-        self.damage_class = kwargs.get("damage_class")
-        self.effect_short = kwargs.get("effect_short")
+        self.generation = kwargs["generation"]["name"]
+        self.accuracy = kwargs["accuracy"]
+        self.pp = kwargs["pp"]
+        self.power = kwargs["power"]
+        self.type = kwargs["type"]["name"]
+        self.damage_class = kwargs["damage_class"]["name"]
+        self.effect_short = kwargs["effect_entries"][0]["short_effect"]
+
+    def __str__(self):
+        return f"Name: {self.name}\n" \
+               f"ID: {self.id}\n" \
+               f"Generation: {self.generation}\n" \
+               f"Accuracy: {self.accuracy}\n" \
+               f"PP: {self.pp}\n" \
+               f"Power: {self.power}\n" \
+               f"Type: {self.type}\n" \
+               f"Damage Class: {self.damage_class}\n" \
+               f"Effect (Short): {self.effect_short}\n"
 
 
 

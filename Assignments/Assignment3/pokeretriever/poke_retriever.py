@@ -20,9 +20,6 @@ class PokeRetriever:
         """
         target_url = url.format(id_)
         response = await session.request(method="GET", url=target_url)
-        # print("Response object from aiohttp:\n", response)
-        # print("Response object type:\n", type(response))
-        # print("-----")
         json_dict = await response.json()
         return json_dict
 
@@ -37,12 +34,7 @@ class PokeRetriever:
         """
         url = "https://pokeapi.co/api/v2/%s/{}/" % mode
         async with aiohttp.ClientSession() as session:
-            print("***process_requests")
             async_coroutines = [cls.get_pokedex_data(id_, url, session)
                                 for id_ in ids]
-
             responses = await asyncio.gather(*async_coroutines)
-
-            # for response in responses:
-            #     print(response)
             return responses
