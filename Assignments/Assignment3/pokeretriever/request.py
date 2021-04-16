@@ -85,20 +85,19 @@ class PrepareDataHandler(BaseRequestHandler):
 
 
 class GetResponseHandler(BaseRequestHandler):
-    def handle_request(self, request: Request, **kwargs):
+    async def handle_request(self, request: Request, **kwargs):
         print("getting response")
-        kwargs["response"] = PokeRetriever.retrieve(request.mode, kwargs.get("ids"))
-        print(kwargs["response"][2]["abilities"])
-        return self.next_handler.handle_request(request, **kwargs)
+        kwargs["response"] = await PokeRetriever.process_requests(request.mode, kwargs.get("ids"))
+        return await self.next_handler.handle_request(request, **kwargs)
 
 
 class PokedexObjectHandler(BaseRequestHandler):
-    def handle_request(self, request: Request, **kwargs):
+    async def handle_request(self, request: Request, **kwargs):
         print("getting pokedex objects")
-        poke_objects = []
         factory = FactoryTypes.factory_types[request.mode]()
-        for x in kwargs.get("response"):
-            poke_objects.append(factory.create_object(x, request))
+        async_coroutines = [factory.create_object(**json_obj, expanded=request.expanded)
+                            for json_obj in kwargs["response"]]
+        poke_objects = await asyncio.gather(*async_coroutines)
         return poke_objects
 
         # print(poke_objects[0].id)

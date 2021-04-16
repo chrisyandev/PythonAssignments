@@ -4,12 +4,6 @@ import aiohttp
 
 class PokeRetriever:
 
-    @classmethod
-    def retrieve(cls, mode, ids: list):
-        loop = asyncio.get_event_loop()
-        response = loop.run_until_complete(cls.process_requests(mode, ids))
-        return response
-
     @staticmethod
     async def get_pokedex_data(id_, url: str, session: aiohttp.ClientSession,) -> dict:
         """

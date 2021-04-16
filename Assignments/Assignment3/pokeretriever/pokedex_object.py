@@ -16,8 +16,8 @@ class Pokemon(PokedexObject):
             self.base_value = kwargs["base_stat"]
             self.details = None
 
-        def set_details(self):
-            response = PokeRetriever.retrieve("stat", [self.name])
+        async def set_details(self):
+            response = await PokeRetriever.process_requests("stat", [self.name])
             self.details = Stat(**response[0])
 
         def __str__(self):
@@ -28,8 +28,8 @@ class Pokemon(PokedexObject):
             self.name = kwargs["ability"]["name"]
             self.details = None
 
-        def set_details(self):
-            response = PokeRetriever.retrieve("ability", [self.name])
+        async def set_details(self):
+            response = await PokeRetriever.process_requests("ability", [self.name])
             self.details = Ability(**response[0])
 
         def __str__(self):
@@ -41,8 +41,8 @@ class Pokemon(PokedexObject):
             self.level_acquired = kwargs["version_group_details"][0]["level_learned_at"]
             self.details = None
 
-        def set_details(self):
-            response = PokeRetriever.retrieve("move", [self.name])
+        async def set_details(self):
+            response = await PokeRetriever.process_requests("move", [self.name])
             self.details = Move(**response[0])
 
         def __str__(self):
@@ -54,30 +54,34 @@ class Pokemon(PokedexObject):
         self.height = kwargs["height"]
         self.weight = kwargs["weight"]
         self.types = [t["type"]["name"] for t in kwargs["types"]]
-
         self.stats = []
+        self.abilities = []
+        self.moves = []
+
         json_stats = kwargs["stats"]
         for st in json_stats:
             pokemon_stat = self.PokemonStat(**st)
-            if self.expanded:
-                pokemon_stat.set_details()
             self.stats.append(pokemon_stat)
 
-        self.abilities = []
         json_abilities = kwargs["abilities"]
         for ab in json_abilities:
             pokemon_ability = self.PokemonAbility(**ab)
-            if self.expanded:
-                pokemon_ability.set_details()
             self.abilities.append(pokemon_ability)
 
-        self.moves = []
         json_moves = kwargs["moves"]
         for mo in json_moves:
             pokemon_move = self.PokemonMove(**mo)
-            if self.expanded:
-                pokemon_move.set_details()
             self.moves.append(pokemon_move)
+
+    async def add_pokemon_details(self):
+        async_coroutines = []
+        for st in self.stats:
+            async_coroutines.append(st.set_details())
+        for ab in self.abilities:
+            async_coroutines.append(ab.set_details())
+        for mo in self.moves:
+            async_coroutines.append(mo.set_details())
+        await asyncio.gather(*async_coroutines)
 
     def __str__(self):
         output = f"Name: {self.name}\n" \
