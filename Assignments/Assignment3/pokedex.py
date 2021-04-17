@@ -1,6 +1,4 @@
 import argparse
-import datetime
-
 from pokeretriever.request import *
 from pokeretriever.pokedex_object import *
 
@@ -39,7 +37,11 @@ def setup_request_commandline() -> Request:
         quit()
 
 
-async def execute_request(request: Request) -> list:
+async def execute_request(request: Request):
+    """
+    Sets up a bunch of handlers to process a Request.
+    :param request: a Request
+    """
     validate_data_handler = ValidateDataHandler()
     prepare_data_handler = PrepareDataHandler()
     get_response_handler = GetResponseHandler()

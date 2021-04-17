@@ -1,4 +1,3 @@
-from abc import *
 from .pokedex_object import *
 from .error_object import PokedexError
 
@@ -13,7 +12,7 @@ class PokedexObjectFactory(ABC):
 class PokemonFactory(PokedexObjectFactory):
     async def create_object(self, **kwargs):
         """
-        Creates a Pokemon object.
+        Creates a Pokemon object if JSON object is valid.
         :return: a Pokemon object
         """
         json_obj = kwargs["json_obj"]
@@ -29,7 +28,7 @@ class PokemonFactory(PokedexObjectFactory):
 class AbilityFactory(PokedexObjectFactory):
     async def create_object(self, **kwargs):
         """
-        Creates an Ability object.
+        Creates an Ability object if JSON object is valid.
         :return: an Ability object
         """
         json_obj = kwargs["json_obj"]
@@ -42,7 +41,7 @@ class AbilityFactory(PokedexObjectFactory):
 class MoveFactory(PokedexObjectFactory):
     async def create_object(self, **kwargs):
         """
-        Creates a Move object.
+        Creates a Move object if JSON object is valid.
         :return: a Move object
         """
         json_obj = kwargs["json_obj"]
@@ -54,7 +53,6 @@ class MoveFactory(PokedexObjectFactory):
 
 class FactoryTypes:
     """ Matches category types to their respective PokedexObjectFactory. """
-
     factory_types = {
         "pokemon": PokemonFactory,
         "ability": AbilityFactory,

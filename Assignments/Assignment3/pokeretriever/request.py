@@ -1,12 +1,12 @@
 import datetime
-from abc import *
 from pathlib import Path
-from .poke_retriever import *
 from .pokedex_object_factory import *
 
 
 class Request:
+    """ Contains user input for making an HTTP request. """
     def __init__(self):
+        """ These variables store user input. """
         self.mode = None
         self.input_file = None
         self.input_data = None
@@ -14,6 +14,7 @@ class Request:
         self.output = None
 
     def __str__(self):
+        """ Formats properties as a string. """
         return f"Request -> Mode: {self.mode}, Input file: {self.input_file}, " \
                f"Data: {self.input_data}, Expanded: {self.expanded}, " \
                f"Output: {self.output}"
@@ -73,7 +74,7 @@ class ValidateDataHandler(BaseRequestHandler):
 class PrepareDataHandler(BaseRequestHandler):
     """ Prepares the data in order to be processed. """
     async def handle_request(self, request: Request, **kwargs):
-        """ Converts string from file or Request into bytes. """
+        """ Parses a file for ids. """
         print("preparing data")
         if request.input_data is not None:
             kwargs["ids"] = [request.input_data]
@@ -86,14 +87,18 @@ class PrepareDataHandler(BaseRequestHandler):
 
 
 class GetResponseHandler(BaseRequestHandler):
+    """ Handles getting JSON data. """
     async def handle_request(self, request: Request, **kwargs):
+        """ Makes an HTTP request to pokeapi. """
         print("getting response")
         kwargs["response"] = await PokeRetriever.process_requests(request.mode, kwargs.get("ids"))
         return await self.next_handler.handle_request(request, **kwargs)
 
 
 class PokedexObjectHandler(BaseRequestHandler):
+    """ Handles PokedexObject creation. """
     async def handle_request(self, request: Request, **kwargs):
+        """ Creates the Pokedex objects asynchronously. """
         print("getting pokedex objects")
         factory = FactoryTypes.factory_types[request.mode]()
         async_coroutines = [factory.create_object(json_obj=json_obj, expanded=request.expanded)
@@ -104,7 +109,9 @@ class PokedexObjectHandler(BaseRequestHandler):
 
 
 class OutputHandler(BaseRequestHandler):
+    """ Handles the output. """
     def handle_request(self, request: Request, **kwargs):
+        """ Prints to console or writes to a text file. """
         print("outputting result")
         poke_objects = kwargs["poke_objects"]
         if request.output == "console":

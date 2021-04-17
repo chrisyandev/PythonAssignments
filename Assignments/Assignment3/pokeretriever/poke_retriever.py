@@ -3,20 +3,21 @@ import aiohttp
 
 
 class PokeRetriever:
+    """ Contains methods to retrieve data from pokeapi. """
 
     @staticmethod
-    async def get_pokedex_data(id_, url: str, session: aiohttp.ClientSession,) -> dict:
+    async def get_pokedex_data(id_, url: str, session: aiohttp.ClientSession,):
         """
         :param id_: an int or str
         :param url: a string, the unformatted url (missing parameters)
         :param session: a HTTP session
-        :return: a dict, json representation of response.
+        :return: a dict, JSON representation of response.
         """
         target_url = url.format(id_)
         try:
             response = await session.request(method="GET", url=target_url)
             json_dict = await response.json()
-        except aiohttp.client_exceptions.ContentTypeError:
+        except aiohttp.ContentTypeError:
             return None
         else:
             return json_dict
@@ -24,8 +25,6 @@ class PokeRetriever:
     @classmethod
     async def process_requests(cls, mode: str, ids: list) -> tuple:
         """
-        This function depicts the use of asyncio.gather to run multiple
-        async coroutines concurrently.
         :param mode: a str
         :param ids: a list of int or str
         :return: list of dict, collection of response data from the endpoint.
