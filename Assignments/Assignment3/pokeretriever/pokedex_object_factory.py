@@ -20,7 +20,7 @@ class PokemonFactory(PokedexObjectFactory):
         if json_obj is None:
             return PokedexError()
 
-        pokemon = Pokemon(**json_obj)
+        pokemon = Pokemon(**json_obj, expanded=kwargs["expanded"])
         if kwargs["expanded"]:
             await pokemon.add_pokemon_details()
         return pokemon
@@ -36,7 +36,7 @@ class AbilityFactory(PokedexObjectFactory):
         if json_obj is None:
             return PokedexError()
 
-        return Ability(**json_obj)
+        return Ability(**json_obj, expanded=kwargs["expanded"])
 
 
 class MoveFactory(PokedexObjectFactory):
@@ -49,7 +49,7 @@ class MoveFactory(PokedexObjectFactory):
         if json_obj is None:
             return PokedexError()
 
-        return Move(**json_obj)
+        return Move(**json_obj, expanded=kwargs["expanded"])
 
 
 class FactoryTypes:
