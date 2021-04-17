@@ -106,10 +106,19 @@ class PokedexObjectHandler(BaseRequestHandler):
 class OutputHandler(BaseRequestHandler):
     def handle_request(self, request: Request, **kwargs):
         poke_objects = kwargs["poke_objects"]
-        print("Timestamp: " + str(datetime.datetime.now()))
-        print("Number of requests: " + str(len(poke_objects)))
-        for po in poke_objects:
-            print("==============================================")
-            print(po)
-            print("==============================================")
+        if request.output == "console":
+            print("Timestamp: " + str(datetime.datetime.now()))
+            print("Number of requests: " + str(len(poke_objects)))
+            for po in poke_objects:
+                print("==============================================")
+                print(po)
+                print("==============================================")
+        else:
+            with open(request.output, mode='w', encoding="utf-8") as output:
+                output.write("Timestamp: " + str(datetime.datetime.now()) + "\n")
+                output.write("Number of requests: " + str(len(poke_objects)) + "\n")
+                for po in poke_objects:
+                    output.write("==============================================\n")
+                    output.write(str(po) + "\n")
+                    output.write("==============================================\n")
         return "success", poke_objects
