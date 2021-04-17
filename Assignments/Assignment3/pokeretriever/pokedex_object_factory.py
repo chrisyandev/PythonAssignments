@@ -22,30 +22,21 @@ class PokemonFactory(PokedexObjectFactory):
 
 
 class AbilityFactory(PokedexObjectFactory):
-    def create_object(self, json_data, request):
+    async def create_object(self, **kwargs):
         """
         Creates an Ability object.
         :return: an Ability object
         """
-        pass
-
-
-class StatFactory(PokedexObjectFactory):
-    def create_object(self, json_data, request):
-        """
-        Creates a Stat object.
-        :return: a Stat object
-        """
-        return Stat(**json_data)
+        return Ability(**kwargs)
 
 
 class MoveFactory(PokedexObjectFactory):
-    def create_object(self, json_data, request):
+    async def create_object(self, **kwargs):
         """
         Creates a Move object.
         :return: a Move object
         """
-        pass
+        return Move(**kwargs)
 
 
 class FactoryTypes:
@@ -54,6 +45,5 @@ class FactoryTypes:
     factory_types = {
         "pokemon": PokemonFactory,
         "ability": AbilityFactory,
-        "stat": StatFactory,
         "move": MoveFactory
     }

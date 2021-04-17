@@ -25,8 +25,8 @@ def setup_request_commandline() -> Request:
 
     try:
         args = parser.parse_args()
-        request = Request()
         print(vars(args))
+        request = Request()
         request.mode = args.mode
         request.input_file = args.inputfile
         request.input_data = args.inputdata
