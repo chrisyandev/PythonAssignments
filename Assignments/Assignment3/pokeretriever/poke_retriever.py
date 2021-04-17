@@ -13,9 +13,13 @@ class PokeRetriever:
         :return: a dict, json representation of response.
         """
         target_url = url.format(id_)
-        response = await session.request(method="GET", url=target_url)
-        json_dict = await response.json()
-        return json_dict
+        try:
+            response = await session.request(method="GET", url=target_url)
+            json_dict = await response.json()
+        except aiohttp.client_exceptions.ContentTypeError:
+            return None
+        else:
+            return json_dict
 
     @classmethod
     async def process_requests(cls, mode: str, ids: list) -> tuple:

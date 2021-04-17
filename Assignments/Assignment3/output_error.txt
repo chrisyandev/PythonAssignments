@@ -1,0 +1,26 @@
+Timestamp: 2021-04-16 20:34:03.148156
+Number of requests: 5
+==============================================
+An error occurred. Request was not processed.
+==============================================
+==============================================
+An error occurred. Request was not processed.
+==============================================
+==============================================
+Name: constrict
+ID: 132
+Generation: generation-i
+Accuracy: 100
+PP: 35
+Power: 10
+Type: normal
+Damage Class: physical
+Effect (Short): Has a $effect_chance% chance to lower the target's Speed by one stage.
+
+==============================================
+==============================================
+An error occurred. Request was not processed.
+==============================================
+==============================================
+An error occurred. Request was not processed.
+==============================================

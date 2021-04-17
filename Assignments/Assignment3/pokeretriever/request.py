@@ -96,7 +96,7 @@ class PokedexObjectHandler(BaseRequestHandler):
     async def handle_request(self, request: Request, **kwargs):
         print("getting pokedex objects")
         factory = FactoryTypes.factory_types[request.mode]()
-        async_coroutines = [factory.create_object(**json_obj, expanded=request.expanded)
+        async_coroutines = [factory.create_object(json_obj=json_obj, expanded=request.expanded)
                             for json_obj in kwargs["response"]]
         poke_objects = await asyncio.gather(*async_coroutines)
         kwargs["poke_objects"] = poke_objects
@@ -105,6 +105,7 @@ class PokedexObjectHandler(BaseRequestHandler):
 
 class OutputHandler(BaseRequestHandler):
     def handle_request(self, request: Request, **kwargs):
+        print("outputting result")
         poke_objects = kwargs["poke_objects"]
         if request.output == "console":
             print("Timestamp: " + str(datetime.datetime.now()))

@@ -1,5 +1,6 @@
 from abc import *
 from .pokedex_object import *
+from .error_object import PokedexError
 
 
 class PokedexObjectFactory(ABC):
@@ -15,7 +16,11 @@ class PokemonFactory(PokedexObjectFactory):
         Creates a Pokemon object.
         :return: a Pokemon object
         """
-        pokemon = Pokemon(**kwargs)
+        json_obj = kwargs["json_obj"]
+        if json_obj is None:
+            return PokedexError()
+
+        pokemon = Pokemon(**json_obj)
         if kwargs["expanded"]:
             await pokemon.add_pokemon_details()
         return pokemon
@@ -27,7 +32,11 @@ class AbilityFactory(PokedexObjectFactory):
         Creates an Ability object.
         :return: an Ability object
         """
-        return Ability(**kwargs)
+        json_obj = kwargs["json_obj"]
+        if json_obj is None:
+            return PokedexError()
+
+        return Ability(**json_obj)
 
 
 class MoveFactory(PokedexObjectFactory):
@@ -36,7 +45,11 @@ class MoveFactory(PokedexObjectFactory):
         Creates a Move object.
         :return: a Move object
         """
-        return Move(**kwargs)
+        json_obj = kwargs["json_obj"]
+        if json_obj is None:
+            return PokedexError()
+
+        return Move(**json_obj)
 
 
 class FactoryTypes:
