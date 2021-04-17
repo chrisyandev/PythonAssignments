@@ -44,26 +44,21 @@ async def execute_request(request: Request) -> list:
     prepare_data_handler = PrepareDataHandler()
     get_response_handler = GetResponseHandler()
     pokedex_object_handler = PokedexObjectHandler()
+    output_handler = OutputHandler()
     validate_data_handler.set_handler(prepare_data_handler)
     prepare_data_handler.set_handler(get_response_handler)
     get_response_handler.set_handler(pokedex_object_handler)
+    pokedex_object_handler.set_handler(output_handler)
 
     starting_handler = validate_data_handler
-    result = await starting_handler.handle_request(request)
-    return result
+    await starting_handler.handle_request(request)
 
 
-async def main(request: Request):
+def main(request: Request):
     """ Drives the program. """
-    poke_objs = await execute_request(request)
-    print("Timestamp: " + str(datetime.datetime.now()))
-    print("Number of requests: " + str(len(poke_objs)))
-    for po in poke_objs:
-        print("==============================================")
-        print(po)
-        print("==============================================")
+    asyncio.get_event_loop().run_until_complete(execute_request(request))
 
 
 if __name__ == '__main__':
     request_ = setup_request_commandline()
-    asyncio.get_event_loop().run_until_complete(main(request_))
+    main(request_)

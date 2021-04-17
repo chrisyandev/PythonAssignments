@@ -1,3 +1,4 @@
+import datetime
 from abc import *
 from pathlib import Path
 from .poke_retriever import *
@@ -38,7 +39,7 @@ class BaseRequestHandler(ABC):
 
 class ValidateDataHandler(BaseRequestHandler):
     """ Checks if data can be processed. """
-    def handle_request(self, request: Request, **kwargs):
+    async def handle_request(self, request: Request, **kwargs):
         """
         If file exists and is a text file, this can be processed.
         Or if data input isn't an empty string, this can be processed.
@@ -63,15 +64,15 @@ class ValidateDataHandler(BaseRequestHandler):
                 is_valid_request = True
 
         if is_valid_request:
-            return self.next_handler.handle_request(request, **kwargs)
+            return await self.next_handler.handle_request(request, **kwargs)
         else:
-            print("Cannot process data")
+            print("Data input error. File does not exist or string is empty.")
             return
 
 
 class PrepareDataHandler(BaseRequestHandler):
     """ Prepares the data in order to be processed. """
-    def handle_request(self, request: Request, **kwargs):
+    async def handle_request(self, request: Request, **kwargs):
         """ Converts string from file or Request into bytes. """
         print("preparing data")
         if request.input_data is not None:
@@ -81,7 +82,7 @@ class PrepareDataHandler(BaseRequestHandler):
                 ids = text_file.readlines()
                 ids = [w.rstrip("\n") for w in ids]
                 kwargs["ids"] = ids
-        return self.next_handler.handle_request(request, **kwargs)
+        return await self.next_handler.handle_request(request, **kwargs)
 
 
 class GetResponseHandler(BaseRequestHandler):
@@ -98,15 +99,17 @@ class PokedexObjectHandler(BaseRequestHandler):
         async_coroutines = [factory.create_object(**json_obj, expanded=request.expanded)
                             for json_obj in kwargs["response"]]
         poke_objects = await asyncio.gather(*async_coroutines)
-        return poke_objects
-
-        # print(poke_objects[0].id)
-        # print(poke_objects[0].name)
-        # print(poke_objects[0].height)
-        # print(poke_objects[0].weight)
-        # print(poke_objects[0].expanded)
+        kwargs["poke_objects"] = poke_objects
+        return self.next_handler.handle_request(request, **kwargs)
 
 
-class OutputPokedexObjectHandler(BaseRequestHandler):
-    pass
-
+class OutputHandler(BaseRequestHandler):
+    def handle_request(self, request: Request, **kwargs):
+        poke_objects = kwargs["poke_objects"]
+        print("Timestamp: " + str(datetime.datetime.now()))
+        print("Number of requests: " + str(len(poke_objects)))
+        for po in poke_objects:
+            print("==============================================")
+            print(po)
+            print("==============================================")
+        return "success", poke_objects
